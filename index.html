@@ -8,7 +8,8 @@
   <title>Space Economy Research Platform</title>
   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/recharts@2.15.0/Recharts.js"></script>
+  <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+  <script src="https://unpkg.com/recharts@2.12.7/Recharts.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     * {
@@ -477,6 +478,14 @@
         }
 
         ReactDOM.render(<App />, document.getElementById("root"));
+      } catch (error) {
+        console.error('Error initializing app:', error);
+        document.getElementById('root').innerHTML = '<div style="color: red; padding: 20px;">Error: Failed to initialize application. Please check console for details.</div>';
+      }
+    }
+
+    // Start the library check
+    checkLibraries();
   </script>
 
 </body>
