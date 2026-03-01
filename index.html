@@ -447,6 +447,8 @@
       );
       const [expandedCatalyst, setExpandedCatalyst] = useState(null);
       const [refreshModal, setRefreshModal] = useState(null);
+      const [baseAlloc, setBaseAlloc] = useState({ LUNR: 25, RKLB: 25, FLY: 15, UFO: 20, ARKX: 15 });
+      const pendingAllocRef = React.useRef(alloc);
 
       const totalAlloc = useMemo(() => Object.values(alloc).reduce((a, b) => a + b, 0), [alloc]);
 
@@ -608,7 +610,35 @@
               {Object.entries(alloc).map(([t, v]) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <span style={{ color: C.acc, fontWeight: 700, fontSize: 13, minWidth: 48 }}>{t}</span>
-                  <input type="range" min={0} max={60} value={v} onChange={e => setAlloc(p => ({ ...p, [t]: Number(e.target.value) }))} style={{ flex: 1 }} />
+                  <input type="range" min={0} max={100} value={v}
+                    onChange={e => {
+                      const newVal = Number(e.target.value);
+                      const rest = 100 - newVal;
+                      const others = Object.entries(baseAlloc).filter(([k]) => k !== t);
+                      const otherSum = others.reduce((s, [, ov]) => s + ov, 0);
+                      const newAlloc = { ...alloc, [t]: newVal };
+                      if (otherSum > 0) {
+                        let assigned = 0;
+                        others.forEach(([k, ov], idx) => {
+                          if (idx === others.length - 1) {
+                            newAlloc[k] = Math.max(0, rest - assigned);
+                          } else {
+                            const scaled = Math.round(ov * rest / otherSum);
+                            newAlloc[k] = Math.max(0, scaled);
+                            assigned += newAlloc[k];
+                          }
+                        });
+                      } else {
+                        const each = Math.floor(rest / others.length);
+                        others.forEach(([k]) => { newAlloc[k] = each; });
+                        if (others.length > 0) newAlloc[others[0][0]] += rest - each * others.length;
+                      }
+                      pendingAllocRef.current = newAlloc;
+                      setAlloc(newAlloc);
+                    }}
+                    onMouseUp={() => setBaseAlloc({ ...pendingAllocRef.current })}
+                    onTouchEnd={() => setBaseAlloc({ ...pendingAllocRef.current })}
+                    style={{ flex: 1 }} />
                   <span style={{ color: "#fff", fontSize: 13, minWidth: 36, textAlign: "right" }}>{v}%</span>
                   <span style={{ color: C.dim, fontSize: 11, minWidth: 70, textAlign: "right" }}>${(budget * v / totalAlloc).toFixed(0)}</span>
                 </div>
