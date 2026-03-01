@@ -493,6 +493,8 @@
       }, [portfolioData, totalAlloc]);
 
       const ttStyle = { background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 8, color: "#fff", fontSize: 12 };
+      const ttItem = { color: "#fff" };
+      const ttLabel = { color: "#fff" };
 
       const Pill = ({ active, label, onClick }) => (
         <button onClick={onClick} style={{ padding: "6px 16px", borderRadius: 20, border: `1px solid ${active ? C.acc : C.bdr}`, background: active ? "rgba(59,130,246,0.15)" : "transparent", color: active ? C.acc : C.mut, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{label}</button>
@@ -566,7 +568,7 @@
                 <BarChart data={Object.entries(STOCKS).map(([t, d]) => ({ ticker: t, current: d.price, target: d.ptAvg }))}>
                   <XAxis dataKey="ticker" stroke={C.dim} fontSize={12} />
                   <YAxis stroke={C.dim} fontSize={11} />
-                  <Tooltip contentStyle={ttStyle} />
+                  <Tooltip contentStyle={ttStyle} itemStyle={ttItem} labelStyle={ttLabel} />
                   <Bar dataKey="current" fill={C.acc} name="Current" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="target" fill={C.grn} name="Avg Target" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -684,7 +686,7 @@
                 <BarChart data={scenarios} layout="vertical">
                   <XAxis type="number" stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
                   <YAxis type="category" dataKey="scenario" stroke={C.dim} fontSize={12} width={50} />
-                  <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)}`} />
+                  <Tooltip contentStyle={ttStyle} itemStyle={ttItem} labelStyle={ttLabel} formatter={v => `$${v.toFixed(0)}`} />
                   <Bar dataKey="value" radius={[0, 6, 6, 0]}>
                     {scenarios.map((_, i) => <Cell key={i} fill={[C.grn, C.yel, C.red][i]} />)}
                   </Bar>
@@ -901,7 +903,7 @@
                   <CartesianGrid strokeDasharray="3 3" stroke={C.bdr} />
                   <XAxis dataKey="change" stroke={C.dim} fontSize={10} interval={3} />
                   <YAxis stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip contentStyle={ttStyle} formatter={(v, name) => name === "value" ? `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}` : `${v}%`} />
+                  <Tooltip contentStyle={ttStyle} itemStyle={ttItem} labelStyle={ttLabel} formatter={(v, name) => name === "value" ? `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}` : `${v}%`} />
                   <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={C.acc} stopOpacity={0.3} /><stop offset="100%" stopColor={C.acc} stopOpacity={0} /></linearGradient></defs>
                   <Area type="monotone" dataKey="value" stroke={C.acc} fill="url(#grad)" strokeWidth={2} name="value" />
                 </AreaChart>
