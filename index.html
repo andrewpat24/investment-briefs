@@ -23,6 +23,10 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
+    .recharts-default-tooltip {
+      color: white;
+    }
+
     input[type=number] {
       -moz-appearance: textfield;
       appearance: textfield;
@@ -257,7 +261,16 @@
                     <Pie data={portfolioData} dataKey="dollars" nameKey="ticker" cx="50%" cy="50%" outerRadius={80} strokeWidth={2} stroke={C.bg}>
                       {portfolioData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
                     </Pie>
-                    <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)}`} />
+                    <Tooltip content={({ active, payload }) => {
+                      if (!active || !payload || !payload.length) return null;
+                      const d = payload[0];
+                      return (
+                        <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: "8px 12px", fontSize: 12 }}>
+                          <div style={{ color: "#fff", fontWeight: 600 }}>{d.name}</div>
+                          <div style={{ color: "#fff" }}>${d.value.toFixed(0)}</div>
+                        </div>
+                      );
+                    }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
