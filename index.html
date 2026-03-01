@@ -61,21 +61,34 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState, useMemo, useEffect } = React;
     const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, AreaChart, Area } = Recharts;
 
     const C = { bg: "#0a0e1a", card: "#111827", bdr: "#1f2937", acc: "#3b82f6", grn: "#10b981", red: "#ef4444", yel: "#f59e0b", pur: "#8b5cf6", cyan: "#06b6d4", mut: "#9ca3af", dim: "#6b7280", txt: "#e5e7eb" };
     const COLORS = [C.acc, C.grn, C.pur, C.yel, C.cyan];
 
-    const STOCKS = {
-      LUNR: { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9 },
-      RKLB: { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7 },
-      FLY: { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8 },
-    };
-    const ETFS = {
-      UFO: { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30 },
-      ARKX: { name: "ARK Space & Defense", price: 32.40, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35 },
-    };
+    // === LUNR DATA === (last updated: 2026-03-01T12:00:00Z)
+    const LUNR_DATA = { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === END LUNR DATA ===
+
+    // === RKLB DATA === (last updated: 2026-03-01T12:00:00Z)
+    const RKLB_DATA = { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === END RKLB DATA ===
+
+    // === FLY DATA === (last updated: 2026-03-01T12:00:00Z)
+    const FLY_DATA = { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === END FLY DATA ===
+
+    // === UFO DATA === (last updated: 2026-03-01T12:00:00Z)
+    const UFO_DATA = { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === END UFO DATA ===
+
+    // === ARKX DATA === (last updated: 2026-03-01T12:00:00Z)
+    const ARKX_DATA = { name: "ARK Space & Defense", price: 32.40, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === END ARKX DATA ===
+
+    const STOCKS = { LUNR: LUNR_DATA, RKLB: RKLB_DATA, FLY: FLY_DATA };
+    const ETFS = { UFO: UFO_DATA, ARKX: ARKX_DATA };
     const ALL = { ...STOCKS, ...ETFS };
 
     const CATALYSTS = [
@@ -220,6 +233,210 @@
     const TABS = ["Overview", "Portfolio", "Catalysts", "Sensitivity", "Cost Basis"];
     const pct = (c, p) => ((c - p) / p * 100).toFixed(2);
 
+    function RefreshModal({ ticker, data, onClose, setRefreshModal }) {
+      const [step, setStep] = useState(1);
+      const [activeTicker, setActiveTicker] = useState(ticker);
+      const [formValues, setFormValues] = useState({});
+      const [formErrors, setFormErrors] = useState({});
+      const [generatedCode, setGeneratedCode] = useState("");
+      const [copied, setCopied] = useState(false);
+      const activeData = activeTicker ? ALL[activeTicker] : null;
+
+      const stringFields = new Set(['mc', 'aum']);
+
+      useEffect(() => {
+        if (activeTicker && ALL[activeTicker]) {
+          const fields = activeTicker && ETFS[activeTicker]
+            ? ["price", "er", "w52h", "w52l", "ytd", "aum", "holdings"]
+            : ["price", "prev", "mc", "pe", "w52h", "w52l", "ptAvg", "ptHigh", "ptLow", "beta", "risk"];
+          const initial = {};
+          fields.forEach(f => { initial[f] = ALL[activeTicker][f] ?? ''; });
+          setFormValues(initial);
+          setFormErrors({});
+          setStep(1);
+          setGeneratedCode("");
+          setCopied(false);
+        }
+      }, [activeTicker]);
+
+      function generateCode(t, vals) {
+        const now = new Date().toISOString();
+        const isETF = !!ETFS[t];
+        const allFields = isETF
+          ? ['name', 'price', 'er', 'w52h', 'w52l', 'ytd', 'aum', 'holdings']
+          : ['name', 'price', 'prev', 'mc', 'pe', 'w52h', 'w52l', 'sector', 'ptAvg', 'ptHigh', 'ptLow', 'beta', 'risk'];
+        const src = ALL[t];
+        const sFields = new Set(['name', 'sector', 'mc', 'aum']);
+        const entries = allFields.map(f => {
+          const val = (f === 'name' || f === 'sector') ? src[f] : vals[f];
+          const formatted = sFields.has(f) ? `"${val}"` : val;
+          return `  ${f}: ${formatted}`;
+        });
+        entries.push(`  lastUpdated: "${now}"`);
+        return [
+          `// === ${t} DATA === (last updated: ${now})`,
+          `const ${t}_DATA = {`,
+          entries.join(',\n'),
+          `};`,
+          `// === END ${t} DATA ===`,
+        ].join('\n');
+      }
+
+      function handleGenerate() {
+        const fields = ETFS[activeTicker]
+          ? ["price", "er", "w52h", "w52l", "ytd", "aum", "holdings"]
+          : ["price", "prev", "mc", "pe", "w52h", "w52l", "ptAvg", "ptHigh", "ptLow", "beta", "risk"];
+        const errors = {};
+        fields.forEach(f => {
+          const v = formValues[f];
+          if (stringFields.has(f)) {
+            if (!String(v).trim()) errors[f] = "Required";
+          } else {
+            if (!isFinite(parseFloat(v)) || String(v).trim() === '') errors[f] = "Must be a valid number";
+          }
+        });
+        if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
+        setFormErrors({});
+        const code = generateCode(activeTicker, formValues);
+        setGeneratedCode(code);
+        setStep(3);
+      }
+
+      const getFieldList = (t) => {
+        const isETF = !!ETFS[t];
+        if (isETF) {
+          return ["price", "er", "w52h", "w52l", "ytd", "aum", "holdings"];
+        } else {
+          return ["price", "prev", "mc", "pe", "w52h", "w52l", "ptAvg", "ptHigh", "ptLow", "beta", "risk"];
+        }
+      };
+
+      const fieldLabels = {
+        price: "Current Price ($)",
+        prev: "Previous Close ($)",
+        mc: "Market Cap",
+        pe: "P/E Ratio",
+        w52h: "52-Week High ($)",
+        w52l: "52-Week Low ($)",
+        ptAvg: "Analyst PT Average ($)",
+        ptHigh: "Analyst PT High ($)",
+        ptLow: "Analyst PT Low ($)",
+        beta: "Beta",
+        risk: "Risk Score (1–10)",
+        er: "Expense Ratio (%)",
+        ytd: "YTD Return (%)",
+        aum: "AUM",
+        holdings: "# Holdings"
+      };
+
+      // Ticker picker mode
+      if (!activeTicker) {
+        return (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }} onClick={onClose}>
+            <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, padding: 24, width: 540, maxWidth: "90vw", maxHeight: "85vh", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                <span style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>Select a Ticker</span>
+                <button onClick={onClose} style={{ background: "none", border: "none", color: C.dim, cursor: "pointer", fontSize: 20 }}>✕</button>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {Object.keys(ALL).map(t => (
+                  <button key={t} onClick={() => setActiveTicker(t)} style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: "12px 16px", color: C.acc, fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
+                    {t} — {ALL[t].name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Step indicator
+      const stepIndicator = (
+        <div style={{ display: "flex", justifyContent: "center", gap: 12, marginBottom: 20, fontSize: 12 }}>
+          <span style={{ color: step === 1 ? C.acc : C.dim }}>1 · Navigate</span>
+          <span style={{ color: C.dim }}>→</span>
+          <span style={{ color: step === 2 ? C.acc : C.dim }}>2 · Input</span>
+          <span style={{ color: C.dim }}>→</span>
+          <span style={{ color: step === 3 ? C.acc : C.dim }}>3 · Copy</span>
+        </div>
+      );
+
+      return (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }} onClick={onClose}>
+          <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, padding: 24, width: 540, maxWidth: "90vw", maxHeight: "85vh", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <span style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>{activeTicker} — {activeData?.name}</span>
+              <button onClick={onClose} style={{ background: "none", border: "none", color: C.dim, cursor: "pointer", fontSize: 20 }}>✕</button>
+            </div>
+
+            {stepIndicator}
+
+            {step === 1 && (
+              <div>
+                <button onClick={() => window.open(`https://finance.yahoo.com/quote/${activeTicker}`, '_blank')} style={{ background: C.acc, color: "#fff", borderRadius: 6, padding: "8px 14px", border: "none", cursor: "pointer", fontSize: 13, marginBottom: 16 }}>Open on Yahoo Finance →</button>
+                <div style={{ color: C.mut, fontSize: 12, marginBottom: 8 }}>Data to collect:</div>
+                <ul style={{ listStyle: "disc", paddingLeft: 20, color: C.mut, fontSize: 12, lineHeight: 1.8, marginBottom: 20 }}>
+                  {getFieldList(activeTicker).map(f => (
+                    <li key={f}>{fieldLabels[f]}</li>
+                  ))}
+                </ul>
+                <button onClick={() => setStep(2)} style={{ background: C.acc, color: "#fff", borderRadius: 6, padding: "8px 14px", border: "none", cursor: "pointer", fontSize: 13 }}>I have the data, next →</button>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div>
+                <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>
+                  Last updated: {activeData?.lastUpdated ? new Date(activeData.lastUpdated).toLocaleString() : "Never updated"}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+                  {(ETFS[activeTicker]
+                    ? ["price", "er", "w52h", "w52l", "ytd", "aum", "holdings"]
+                    : ["price", "prev", "mc", "pe", "w52h", "w52l", "ptAvg", "ptHigh", "ptLow", "beta", "risk"]
+                  ).map(f => (
+                    <div key={f}>
+                      <label style={{ display: "block", color: C.mut, fontSize: 12, marginBottom: 4 }}>{fieldLabels[f]}</label>
+                      <input
+                        type={stringFields.has(f) ? "text" : "number"}
+                        value={formValues[f] ?? ''}
+                        onChange={e => setFormValues(prev => ({ ...prev, [f]: e.target.value }))}
+                        style={{ width: "100%", background: C.bg, border: `1px solid ${formErrors[f] ? C.red : C.bdr}`, borderRadius: 6, padding: "8px 10px", color: "#fff", fontSize: 13 }}
+                      />
+                      {formErrors[f] && <div style={{ color: C.red, fontSize: 11, marginTop: 2 }}>{formErrors[f]}</div>}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={() => setStep(1)} style={{ background: "none", border: `1px solid ${C.bdr}`, color: C.mut, borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 13 }}>← Back</button>
+                  <button onClick={handleGenerate} style={{ background: C.acc, color: "#fff", border: "none", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 13 }}>Generate update →</button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Updated code block for <code style={{ background: C.bg, padding: "2px 6px", borderRadius: 4, fontSize: 13 }}>{activeTicker}</code></div>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(generatedCode); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+                  style={{ background: "none", border: `1px solid ${copied ? C.grn : C.bdr}`, color: copied ? C.grn : C.mut, borderRadius: 6, padding: "6px 12px", cursor: "pointer", fontSize: 12, marginBottom: 8 }}
+                >
+                  {copied ? "✓ Copied!" : "Copy to Clipboard"}
+                </button>
+                <pre style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: 12, fontSize: 12, color: C.mut, overflowX: "auto", whiteSpace: "pre", marginBottom: 12 }}>{generatedCode}</pre>
+                <div style={{ color: C.dim, fontSize: 12, lineHeight: 1.6, marginBottom: 16 }}>
+                  Paste this into your <code style={{ background: C.bg, padding: "1px 4px", borderRadius: 3 }}>index.html</code>, replacing the existing data block for <strong style={{ color: C.mut }}>{activeTicker}</strong>. Look for the comment <code style={{ background: C.bg, padding: "1px 4px", borderRadius: 3 }}>// === {activeTicker} DATA ===</code>.
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={() => setStep(2)} style={{ background: "none", border: `1px solid ${C.bdr}`, color: C.mut, borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 13 }}>← Back</button>
+                  <button onClick={onClose} style={{ background: C.acc, color: "#fff", border: "none", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 13 }}>Done</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
     function App() {
       const [tab, setTab] = useState("Overview");
       const [budget, setBudget] = useState(15000);
@@ -229,6 +446,7 @@
         Object.keys(ALL).map(t => ({ ticker: t, shares: 0, avgCost: 0 }))
       );
       const [expandedCatalyst, setExpandedCatalyst] = useState(null);
+      const [refreshModal, setRefreshModal] = useState(null);
 
       const totalAlloc = useMemo(() => Object.values(alloc).reduce((a, b) => a + b, 0), [alloc]);
 
@@ -278,19 +496,23 @@
         <button onClick={onClick} style={{ padding: "6px 16px", borderRadius: 20, border: `1px solid ${active ? C.acc : C.bdr}`, background: active ? "rgba(59,130,246,0.15)" : "transparent", color: active ? C.acc : C.mut, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{label}</button>
       );
 
-      const StatCard = ({ label, value, sub, color }) => (
+      const StatCard = ({ label, value, sub, color, onLabelClick }) => (
         <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "14px 16px", flex: 1, minWidth: 140 }}>
-          <div style={{ color: C.dim, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
+          <div style={{ color: C.dim, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>
+            {onLabelClick ? (
+              <button onClick={() => onLabelClick(label)} style={{ background: "none", border: "none", color: "inherit", cursor: "pointer", padding: 0, fontSize: "inherit", fontWeight: "inherit", textTransform: "inherit", letterSpacing: "inherit" }}>{label}</button>
+            ) : label}
+          </div>
           <div style={{ color: color || "#fff", fontSize: 22, fontWeight: 700, marginTop: 4 }}>{value}</div>
           {sub && <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{sub}</div>}
         </div>
       );
 
-      const StockRow = ({ ticker, data, isETF }) => {
+      const StockRow = ({ ticker, data, isETF, onTickerClick }) => {
         const chg = isETF ? null : pct(data.price, data.prev);
         return (
           <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderBottom: `1px solid ${C.bdr}`, gap: 12 }}>
-            <div style={{ minWidth: 56 }}><span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{ticker}</span></div>
+            <div style={{ minWidth: 56 }}><button onClick={() => onTickerClick(ticker)} style={{ background: "none", border: "none", color: C.acc, fontWeight: 700, fontSize: 14, cursor: "pointer", padding: 0 }}>{ticker}</button></div>
             <div style={{ flex: 1 }}>
               <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{data.name}</div>
               <div style={{ color: C.dim, fontSize: 11 }}>{isETF ? `ER: ${data.er}% | AUM: ${data.aum}` : `${data.sector} | MCap: ${data.mc}`}</div>
@@ -306,15 +528,16 @@
 
       return (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "20px 16px" }}>
-          <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
             {TABS.map(t => <Pill key={t} label={t} active={tab === t} onClick={() => setTab(t)} />)}
+            <button onClick={() => setRefreshModal({ ticker: null })} style={{ padding: "6px 16px", borderRadius: 20, border: `1px solid ${C.grn}`, background: "transparent", color: C.grn, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>⟳ Refresh Data</button>
           </div>
 
           {tab === "Overview" && <div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
               {Object.entries(STOCKS).map(([t, d]) => (
                 <div key={t} style={{ flex: 1, minWidth: 140, display: "flex", flexDirection: "column", gap: 4 }}>
-                  <StatCard label={t} value={`$${d.price}`} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} />
+                  <StatCard label={t} value={`$${d.price}`} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} onLabelClick={t => setRefreshModal({ ticker: t })} />
                   <div style={{ color: C.mut, fontSize: 11, padding: "0 4px", lineHeight: 1.4 }}>{STOCK_CONTEXT[t]}</div>
                 </div>
               ))}
@@ -322,14 +545,14 @@
 
             <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, marginBottom: 16 }}>
               <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr}` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Individual Stocks</span></div>
-              {Object.entries(STOCKS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} />)}
+              {Object.entries(STOCKS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} onTickerClick={t => setRefreshModal({ ticker: t })} />)}
             </div>
 
             <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, marginBottom: 16 }}>
               <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr}` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Space ETFs</span></div>
               {Object.entries(ETFS).map(([t, d]) => (
                 <React.Fragment key={t}>
-                  <StockRow ticker={t} data={d} isETF />
+                  <StockRow ticker={t} data={d} isETF onTickerClick={t => setRefreshModal({ ticker: t })} />
                   <div style={{ padding: "3px 16px 8px", color: C.dim, fontSize: 11 }}>{ETF_CONTEXT[t]}</div>
                 </React.Fragment>
               ))}
@@ -417,7 +640,7 @@
                 <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Share Breakdown</div>
                 {portfolioData.map((p, i) => (
                   <div key={p.ticker} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${C.bdr}` }}>
-                    <span style={{ color: COLORS[i], fontWeight: 600, fontSize: 13 }}>{p.ticker}</span>
+                    <button onClick={() => setRefreshModal({ ticker: p.ticker })} style={{ background: "none", border: "none", color: COLORS[i], fontWeight: 600, fontSize: 13, cursor: "pointer", padding: 0 }}>{p.ticker}</button>
                     <span style={{ color: C.mut, fontSize: 12 }}>{p.shares.toFixed(1)} sh @ ${p.price.toFixed(2)}</span>
                     <span style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>${p.dollars.toFixed(0)}</span>
                   </div>
@@ -692,7 +915,7 @@
                 return (
                   <div key={entry.ticker} style={{ marginBottom: 12, padding: 12, background: C.bg, borderRadius: 8, border: `1px solid ${C.bdr}` }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                      <span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{entry.ticker}</span>
+                      <button onClick={() => setRefreshModal({ ticker: entry.ticker })} style={{ background: "none", border: "none", color: C.acc, fontWeight: 700, fontSize: 14, cursor: "pointer", padding: 0 }}>{entry.ticker}</button>
                       <span style={{ color: "#fff", fontSize: 12 }}>Current: ${cp.toFixed(2)}</span>
                     </div>
                     <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
@@ -744,6 +967,15 @@
           <div style={{ textAlign: "center", color: C.dim, fontSize: 10, marginTop: 24, padding: "12px 0", borderTop: `1px solid ${C.bdr}` }}>
             Research platform for informational purposes only. Not financial advice. Data sourced Feb 28, 2026.
           </div>
+
+          {refreshModal && (
+            <RefreshModal
+              ticker={refreshModal.ticker}
+              data={refreshModal.ticker ? ALL[refreshModal.ticker] : null}
+              onClose={() => setRefreshModal(null)}
+              setRefreshModal={setRefreshModal}
+            />
+          )}
         </div>
       );
     }
