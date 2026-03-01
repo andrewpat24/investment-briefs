@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Economy Research Platform</title>
+  <title>LUNR Research Dashboard</title>
   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
@@ -79,13 +79,143 @@
     const ALL = { ...STOCKS, ...ETFS };
 
     const CATALYSTS = [
-      { event: "LUNR Earnings(Q4)", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "$175M raise impact, IM - 3 timeline update, LTV proposal status, Lanteris integration progress" },
-      { event: "LTV Contract Award", date: "Q1 - Q2 2026", impact: "Critical", type: "Contract", detail: "Up to $4.6B total value. LUNR Moon RACER vs Lunar Outpost Eagle vs Astrolab FLEX. NASA indicated 'coming weeks' as of Jan 2026" },
-      { event: "IM - 3 Mission Launch", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Reiner Gamma landing. Carries CADRE rovers + Khon - 2 relay satellite. Must land upright after two consecutive hard landings" },
-      { event: "RKLB Neutron First Launch", date: "Late 2026", impact: "High", type: "Mission", detail: "Medium - lift vehicle debut. Delayed from 2025. Key to competing with Falcon 9 for constellation deployment" },
-      { event: "SpaceX IPO / Starlink Spin - off", date: "TBD 2026 - 27", impact: "Sector", type: "Catalyst", detail: "Could pull massive capital into space sector. Rising tide lifts all boats — or creates a gravity well that sucks liquidity from smaller names" },
-      { event: "Artemis III Crewed Landing", date: "2028 target", impact: "Sector", type: "Mission", detail: "Trump exec order: return to Moon by 2028. Permanent outpost by 2030. LTV needed for surface ops" },
+      { event: "LUNR Earnings(Q4)", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "$175M raise impact, IM-3 timeline update, LTV proposal status, Lanteris integration progress",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Lanteris Acquisition & Revenue Ramp</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Q4 2025 is the first report fully incorporating the Lanteris acquisition (closed Jan 2026, ~$800M deal). Combined company revenue exceeds $850M with $920M in contract backlog and positive adjusted EBITDA — a meaningful shift from standalone LUNR. The $175M equity raise at $15.12/share extends runway but dilutes. The long-run engine is NSNS ($4.82B NASA comms infrastructure contract via Space Networks Solutions LLC with KBR) — timing of revenue recognition from that contract is the key number to watch.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>What to Watch on the Call</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              NSNS revenue recognition schedule, IM-3 launch window confirmation, LTV award status (management will face questions), and Lanteris integration cost surprises. If Lanteris synergies are ahead of plan and NSNS starts showing up in the top line, the stock re-rates.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Intuitive Machines investor press releases, Q1 2025 earnings call transcript, NSNS contract announcement (investors.intuitivemachines.com)</div>
+          </div>
+        )
+      },
+      { event: "LTV Contract Award", date: "Q1 - Q2 2026", impact: "Critical", type: "Contract", detail: "Up to $4.6B total value. LUNR Moon RACER vs Lunar Outpost Eagle vs Astrolab FLEX. NASA indicated 'coming weeks' as of Jan 2026",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Three-Way Competition</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, margin: "6px 0 10px" }}>
+              <div style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 6, padding: 8 }}>
+                <div style={{ color: C.acc, fontWeight: 700, fontSize: 11 }}>Moon Racer</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>LUNR / Intuitive Machines</div>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, margin: "4px 0" }}>$1.692B</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Partners:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>Boeing + Northrop Grumman</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Delivery:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>Nova-D on Falcon Heavy</div>
+              </div>
+              <div style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 6, padding: 8 }}>
+                <div style={{ color: C.yel, fontWeight: 700, fontSize: 11 }}>Eagle</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Lunar Outpost</div>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, margin: "4px 0" }}>$1.727B</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Partners:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>Lost Lockheed Martin (Sept 2024)</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Delivery:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>SpaceX Starship</div>
+              </div>
+              <div style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 6, padding: 8 }}>
+                <div style={{ color: C.red, fontWeight: 700, fontSize: 11 }}>FLEX</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Venturi Astrolab</div>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, margin: "4px 0" }}>$1.928B</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Partners:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>Starship-dependent</div>
+                <div style={{ color: C.dim, fontSize: 10 }}>Delivery:</div>
+                <div style={{ color: C.mut, fontSize: 10 }}>SpaceX Starship</div>
+              </div>
+            </div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Lockheed Martin's departure from Lunar Outpost in Sept 2024 weakened their team. LUNR's self-owned delivery vehicle (Nova-D) reduces single-supplier risk that affects both competitors. The caveat: two consecutive hard landings are a liability when NASA is choosing an Artemis infrastructure partner.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: SpaceNews LTV coverage, NASA CLPS program, Intuitive Machines investor presentations</div>
+          </div>
+        )
+      },
+      { event: "IM - 3 Mission Launch", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Reiner Gamma landing. Carries CADRE rovers + Khon - 2 relay satellite. Must land upright after two consecutive hard landings",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>The Failure Pattern</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              IM-1 (Feb 2024): altimeter safety switch not activated pre-launch, lander tipped ~30° on contact, operated ~7 days, returned ~350 MB — NASA called it a qualified success. IM-2 (Mar 2025): altimeter failed during descent, struck a plateau, tipped completely, operated ~13 hours, returned ~250 MB. Same root cause category, worse outcome.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Root Causes (Altemus, May 2025)</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.7 }}>
+              1. Laser altimeter signal noise and distortion during final descent<br />
+              2. Low sun angles at the south pole creating long navigation shadows<br />
+              3. Craters appearing differently at low altitude vs. NASA LRO reference imagery
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>The Fix &amp; The Caveat</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Engineering fixes for IM-3: redundant dissimilar altimeters, a lighting-independent surface velocity sensor, an expanded onboard crater database, and ML improvements trained on IM-2 imagery. Altemus said "slight cost increase, no schedule impact." Critical caveat: IM-3 targets Reiner Gamma near the equator — far easier than the south pole. IM-4 returns to the south pole. A clean IM-3 proves the altimeter fix, not the lighting challenge.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: SpaceNews altimeter analysis (May 2025), Spaceflight Now Q1 earnings coverage, Intuitive Machines IM-2 mission page</div>
+          </div>
+        )
+      },
+      { event: "RKLB Neutron First Launch", date: "Late 2026", impact: "High", type: "Mission", detail: "Medium - lift vehicle debut. Delayed from 2025. Key to competing with Falcon 9 for constellation deployment",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Sector Blue Chip Context</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Rocket Lab posted $602M in record Q4 2025 revenue and holds an $816M SDA (Space Development Agency) satellite constellation contract providing multi-year visibility. Electron has 50+ launches and is the proven small-sat workhorse. At $39.2B market cap, RKLB is expensive relative to peers — but it's grounded in real, growing revenue unlike LUNR or FLY.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Why Neutron Matters</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Neutron is a medium-lift reusable rocket meant to compete with Falcon 9 for constellation deployments — originally targeted 2025, now late 2026. Success would expand Rocket Lab's addressable market from ~$10B (small-sat launch) into the full launch market and validate its vertical integration strategy (they build the spacecraft, the components, and now the rocket). The delay risk is real: slippage from 2025 already cost credibility on timeline execution.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Rocket Lab Q4 2025 earnings release, SDA contract announcements, SpaceNews Neutron coverage</div>
+          </div>
+        )
+      },
+      { event: "SpaceX IPO / Starlink Spin - off", date: "TBD 2026 - 27", impact: "Sector", type: "Catalyst", detail: "Could pull massive capital into space sector. Rising tide lifts all boats — or creates a gravity well that sucks liquidity from smaller names",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>The Deal Structure</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              SpaceX merged with xAI (which had acquired X/Twitter in March 2025) on February 2, 2026. The combined entity is valued at $1.25T ($1T SpaceX + $250B xAI) — the world's most valuable private company. SpaceX generated $15B in revenue and ~$8B in profit in 2025. xAI generated ~$250M in revenue while losing $2.5B. Musk is targeting a July 2026 IPO at up to $1.5T — approximately 94x trailing sales on the combined entity.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Sector Impact: Bull vs. Bear</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Bull: a successful IPO floods institutional attention into the space sector, lifting LUNR, FLY, and RKLB through re-rating and capital inflows. Bear: investors concentrate in SpaceX directly, draining liquidity from smaller names; or the $1.5T valuation disappoints and drags the whole sector lower. Some analysts view the xAI merger as profitable SpaceX subsidizing a cash-burning AI venture — a structural weakness if that narrative takes hold. XOVR ETF currently holds ~10-11% SpaceX for retail pre-IPO exposure.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: CNBC SpaceX-xAI merger coverage (Feb 2026), Motley Fool merger analysis (Feb 22, 2026), Gary Marcus Substack</div>
+          </div>
+        )
+      },
+      { event: "Artemis III Crewed Landing", date: "2028 target", impact: "Sector", type: "Mission", detail: "Trump exec order: return to Moon by 2028. Permanent outpost by 2030. LTV needed for surface ops",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>LUNR's Infrastructure Stack</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              LUNR is positioned at multiple layers of the Artemis supply chain: NSNS ($4.82B) keeps astronauts connected via Space Networks Solutions LLC (LUNR + KBR JV); LTV Moon Racer (~$4.6B, pending award) moves them on the surface; and CLPS task orders (IM-3, IM-4) pre-position payloads and establish the Khonstellation data relay network. All three need to be operational for a 2028 crewed landing. This multi-layer positioning is the long-game bull case — every Artemis milestone is a LUNR revenue event.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>The Political Risk</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Artemis has slipped repeatedly: originally targeting 2024, then 2025, then 2026, now 2028. NASA budgets require sustained congressional appropriation, and program priorities can shift with administrations. If Artemis is restructured, defunded, or delayed further, NSNS revenue recognition and LTV contract execution could be deferred or cancelled outright. The 2028 target is aspirational — Trump's executive order sets intent, not funding.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: NASA Artemis program page, Trump space policy executive order, SpaceNews Artemis timeline coverage</div>
+          </div>
+        )
+      },
     ];
+
+    const STOCK_CONTEXT = {
+      LUNR: "IM-3 launch H2 2026 · LTV bid lowest at $1.69B · $4.82B NSNS backlog",
+      RKLB: "Record $602M Q4 rev · $816M SDA contract · Neutron debut late 2026",
+      FLY:  "Blue Ghost: first clean commercial Moon landing · 5 CLPS task orders through 2029",
+    };
+    const ETF_CONTEXT = {
+      UFO:  "Only pure-play space ETF · 0.94% ER · Highest direct space exposure",
+      ARKX: "Actively managed · 0.75% ER · Broadest definition of 'space' — includes defense, eVTOL",
+    };
+    const COST_CONTEXT = {
+      LUNR: "Next catalyst: Earnings Mar 19 → LTV award Q1-Q2 → IM-3 H2 2026",
+      RKLB: "Next catalyst: Neutron launch late 2026 · Trading at $39.2B MCap",
+      FLY:  "Blue Ghost 2 fully booked · IPO'd Aug 2025 at $45, now ~$20",
+    };
 
     const TABS = ["Overview", "Portfolio", "Catalysts", "Sensitivity", "Cost Basis"];
     const pct = (c, p) => ((c - p) / p * 100).toFixed(2);
@@ -98,6 +228,7 @@
       const [costEntries, setCostEntries] = useState(
         Object.keys(ALL).map(t => ({ ticker: t, shares: 0, avgCost: 0 }))
       );
+      const [expandedCatalyst, setExpandedCatalyst] = useState(null);
 
       const totalAlloc = useMemo(() => Object.values(alloc).reduce((a, b) => a + b, 0), [alloc]);
 
@@ -182,7 +313,10 @@
           {tab === "Overview" && <div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
               {Object.entries(STOCKS).map(([t, d]) => (
-                <StatCard key={t} label={t} value={`$${d.price}`} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} />
+                <div key={t} style={{ flex: 1, minWidth: 140, display: "flex", flexDirection: "column", gap: 4 }}>
+                  <StatCard label={t} value={`$${d.price}`} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} />
+                  <div style={{ color: C.mut, fontSize: 11, padding: "0 4px", lineHeight: 1.4 }}>{STOCK_CONTEXT[t]}</div>
+                </div>
               ))}
             </div>
 
@@ -193,7 +327,12 @@
 
             <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, marginBottom: 16 }}>
               <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr}` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Space ETFs</span></div>
-              {Object.entries(ETFS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} isETF />)}
+              {Object.entries(ETFS).map(([t, d]) => (
+                <React.Fragment key={t}>
+                  <StockRow ticker={t} data={d} isETF />
+                  <div style={{ padding: "3px 16px 8px", color: C.dim, fontSize: 11 }}>{ETF_CONTEXT[t]}</div>
+                </React.Fragment>
+              ))}
             </div>
 
             <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, padding: 16, marginBottom: 16 }}>
@@ -330,21 +469,37 @@
             <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Catalyst Calendar</div>
             <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>Next 6-12 months = most concentrated binary-event window LUNR will face</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-              {CATALYSTS.map((c, i) => (
-                <div key={i} style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 10, padding: 14, display: "flex", gap: 12 }}>
-                  <div style={{ minWidth: 60, textAlign: "center" }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: c.impact === "Critical" ? C.red : c.impact === "Sector" ? C.pur : C.yel, background: c.impact === "Critical" ? "rgba(239,68,68,0.15)" : c.impact === "Sector" ? "rgba(139,92,246,0.15)" : "rgba(245,158,11,0.15)", padding: "2px 6px", borderRadius: 4 }}>{c.impact}</div>
-                    <div style={{ color: C.dim, fontSize: 10, marginTop: 4 }}>{c.type}</div>
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                      <span style={{ color: "#fff", fontWeight: 600, fontSize: 13 }}>{c.event}</span>
-                      <span style={{ color: C.acc, fontSize: 12 }}>{c.date}</span>
+              {CATALYSTS.map((c, i) => {
+                const isExpanded = expandedCatalyst === i;
+                return (
+                  <div key={i} style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 10, overflow: "hidden" }}>
+                    <div
+                      onClick={() => setExpandedCatalyst(isExpanded ? null : i)}
+                      style={{ padding: 14, display: "flex", gap: 12, cursor: "pointer" }}
+                    >
+                      <div style={{ minWidth: 60, textAlign: "center" }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: c.impact === "Critical" ? C.red : c.impact === "Sector" ? C.pur : C.yel, background: c.impact === "Critical" ? "rgba(239,68,68,0.15)" : c.impact === "Sector" ? "rgba(139,92,246,0.15)" : "rgba(245,158,11,0.15)", padding: "2px 6px", borderRadius: 4 }}>{c.impact}</div>
+                        <div style={{ color: C.dim, fontSize: 10, marginTop: 4 }}>{c.type}</div>
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                          <span style={{ color: "#fff", fontWeight: 600, fontSize: 13 }}>{c.event}</span>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <span style={{ color: C.acc, fontSize: 12 }}>{c.date}</span>
+                            <span style={{ color: C.dim, fontSize: 11 }}>{isExpanded ? "▲" : "▶"}</span>
+                          </div>
+                        </div>
+                        <div style={{ color: C.mut, fontSize: 11, lineHeight: 1.6 }}>{c.detail}</div>
+                      </div>
                     </div>
-                    <div style={{ color: C.mut, fontSize: 11, lineHeight: 1.6 }}>{c.detail}</div>
+                    {isExpanded && c.expandedContent && (
+                      <div style={{ borderTop: `1px solid ${C.bdr}`, padding: 14 }}>
+                        {c.expandedContent}
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 12, padding: 16 }}>
@@ -354,6 +509,129 @@
               </div>
               <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7, marginTop: 12 }}>
                 RKLB is the sector's blue chip at $69 with a $39B market cap — expensive but backed by $602M record Q4 revenue and an $816M SDA contract. Neutron delay to late 2026 is the key risk. FLY at $20 is interesting: successful Blue Ghost lunar landing gives it credibility LUNR lacks, but the stock has cratered 72% from its $73.80 high.
+              </div>
+              <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>Mission Track Record</div>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr>
+                        {["Mission", "Company", "Date", "Landing", "Surface Ops", "Data Returned"].map(h => (
+                          <th key={h} style={{ color: C.dim, fontWeight: 600, padding: "6px 10px", textAlign: "left", borderBottom: `1px solid ${C.bdr}`, fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5 }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { mission: "Peregrine", co: "Astrobotic", date: "Jan 2024", landing: "Failed (never reached Moon)", lc: C.red, ops: "N/A", data: "N/A" },
+                        { mission: "IM-1 Odysseus", co: "Intuitive Machines", date: "Feb 2024", landing: "Tipped ~30°, partial success", lc: C.yel, ops: "~7 days", data: "~350 MB" },
+                        { mission: "Blue Ghost 1", co: "Firefly Aerospace", date: "Mar 2025", landing: "Clean upright landing", lc: C.grn, ops: "14+ days (346 hrs)", data: "119 GB" },
+                        { mission: "IM-2 Athena", co: "Intuitive Machines", date: "Mar 2025", landing: "Tipped, partial failure", lc: C.red, ops: "<13 hours", data: "~250 MB" },
+                      ].map((r, i) => (
+                        <tr key={i} style={{ borderBottom: `1px solid ${C.bdr}` }}>
+                          <td style={{ color: "#fff", fontWeight: 600, padding: "8px 10px" }}>{r.mission}</td>
+                          <td style={{ color: C.mut, padding: "8px 10px" }}>{r.co}</td>
+                          <td style={{ color: C.mut, padding: "8px 10px" }}>{r.date}</td>
+                          <td style={{ color: r.lc, fontWeight: 600, padding: "8px 10px" }}>{r.landing}</td>
+                          <td style={{ color: C.mut, padding: "8px 10px" }}>{r.ops}</td>
+                          <td style={{ color: C.mut, padding: "8px 10px" }}>{r.data}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>Contract Pipeline</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    { name: "NSNS", value: "$4.82B", status: "Active", timeline: "Multi-year", note: "NASA comms infrastructure via Space Networks Solutions LLC (LUNR + KBR JV)" },
+                    { name: "LTV", value: "~$4.6B", status: "Pending Award", timeline: "Q1-Q2 2026", note: "Artemis crewed lunar rover — Moon Racer bid at $1.692B" },
+                    { name: "Lanteris Acquisition", value: "~$800M", status: "Complete", timeline: "Jan 2026", note: "Combined rev >$850M, $920M backlog, positive EBITDA" },
+                    { name: "AFRL / JETSON", value: "$8.2M", status: "Active", timeline: "Ongoing", note: "In-space nuclear power technology contract extension" },
+                    { name: "Khonstellation", value: "TBD", status: "In Development", timeline: "Khon2 on IM-3", note: "Lunar data relay constellation — first node launches on IM-3" },
+                  ].map((r, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 10px", background: C.bg, borderRadius: 6, border: `1px solid ${C.bdr}` }}>
+                      <div style={{ minWidth: 110 }}>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: 12 }}>{r.name}</div>
+                        <div style={{ color: C.grn, fontWeight: 700, fontSize: 12 }}>{r.value}</div>
+                      </div>
+                      <div style={{ minWidth: 100 }}>
+                        <div style={{ color: C.acc, fontSize: 11 }}>{r.status}</div>
+                        <div style={{ color: C.dim, fontSize: 11 }}>{r.timeline}</div>
+                      </div>
+                      <div style={{ flex: 1, color: C.mut, fontSize: 11, lineHeight: 1.5 }}>{r.note}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>LTV Competitive Positioning</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                  {[
+                    { rover: "Moon Racer", co: "LUNR", bid: "$1.692B", partners: "Boeing, Northrop Grumman", delivery: "Nova-D / Falcon Heavy", strength: "Lowest bid, own delivery vehicle, stable team", weakness: "Two consecutive hard landings", col: C.acc },
+                    { rover: "Eagle", co: "Lunar Outpost", bid: "$1.727B", partners: "Lost Lockheed Martin (Sept 2024)", delivery: "SpaceX Starship", strength: "Mid-range bid", weakness: "Team weakened, Starship dependency", col: C.yel },
+                    { rover: "FLEX", co: "Venturi Astrolab", bid: "$1.928B", partners: "Starship-dependent", delivery: "SpaceX Starship", strength: "Novel rover design", weakness: "Highest bid, Starship dependency", col: C.pur },
+                  ].map(r => (
+                    <div key={r.rover} style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: 10 }}>
+                      <div style={{ color: r.col, fontWeight: 700, fontSize: 13 }}>{r.rover}</div>
+                      <div style={{ color: C.dim, fontSize: 11, marginBottom: 6 }}>{r.co}</div>
+                      <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>{r.bid}</div>
+                      <div style={{ fontSize: 11, lineHeight: 1.6 }}>
+                        <div style={{ color: C.dim }}>Partners:</div>
+                        <div style={{ color: C.mut, marginBottom: 4 }}>{r.partners}</div>
+                        <div style={{ color: C.dim }}>Delivery:</div>
+                        <div style={{ color: C.mut, marginBottom: 6 }}>{r.delivery}</div>
+                        <div style={{ color: C.grn, fontSize: 10 }}>+ {r.strength}</div>
+                        <div style={{ color: C.red, fontSize: 10 }}>− {r.weakness}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>Key Risks</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {[
+                    { risk: "LUNR Landing Execution", severity: "Critical", desc: "Two consecutive altimeter failures with same root cause. Fixes planned but unproven. IM-3 equatorial site won't test south pole performance that matters for Artemis." },
+                    { risk: "LTV Contract Outcome", severity: "High", desc: "Landing track record is a liability. Lunar Outpost may replace Lockheed Martin. Loss means ~$4.6B total contract gone to a competitor." },
+                    { risk: "Sector Valuation", severity: "High", desc: "Space stocks are narrative-driven and pre-profitability. Both LUNR and FLY well below 52-week highs. SpaceX IPO could re-rate sector up or down." },
+                    { risk: "SpaceX IPO Composition", severity: "Sector", desc: "Buying SpaceX also means buying money-losing xAI and X/Twitter. $1.5T target implies ~94x trailing sales. Could disappoint and drag sector down." },
+                    { risk: "Regulatory / Political Risk", severity: "High", desc: "Artemis has slipped from 2024 → 2025 → 2026 → 2028. Budget cuts or priority shifts could defer NSNS recognition and LTV execution." },
+                  ].map((r, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 10px", background: C.bg, borderRadius: 6, border: `1px solid ${C.bdr}` }}>
+                      <div style={{ paddingTop: 2, flexShrink: 0 }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: r.severity === "Critical" ? C.red : r.severity === "Sector" ? C.pur : C.yel, background: r.severity === "Critical" ? "rgba(239,68,68,0.15)" : r.severity === "Sector" ? "rgba(139,92,246,0.15)" : "rgba(245,158,11,0.15)", padding: "2px 6px", borderRadius: 4, whiteSpace: "nowrap" }}>{r.severity}</div>
+                      </div>
+                      <div>
+                        <div style={{ color: "#fff", fontWeight: 600, fontSize: 12 }}>{r.risk}</div>
+                        <div style={{ color: C.mut, fontSize: 11, lineHeight: 1.5, marginTop: 2 }}>{r.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
+                <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>Firefly: The Comparison That Matters</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+                  {[
+                    { label: "Blue Ghost 1 (FLY)", date: "Mar 2, 2025", landing: "Clean upright landing", ops: "14+ days / 346 hrs", data: "119 GB", col: C.grn },
+                    { label: "IM-2 Athena (LUNR)", date: "Mar 6, 2025", landing: "Tipped, crater roll", ops: "<13 hours", data: "~250 MB", col: C.red },
+                  ].map(r => (
+                    <div key={r.label} style={{ background: C.bg, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: 10 }}>
+                      <div style={{ color: r.col, fontWeight: 700, fontSize: 12, marginBottom: 6 }}>{r.label}</div>
+                      <div style={{ fontSize: 11, lineHeight: 1.8 }}>
+                        <div><span style={{ color: C.dim }}>Date: </span><span style={{ color: C.mut }}>{r.date}</span></div>
+                        <div><span style={{ color: C.dim }}>Landing: </span><span style={{ color: r.col, fontWeight: 600 }}>{r.landing}</span></div>
+                        <div><span style={{ color: C.dim }}>Ops: </span><span style={{ color: C.mut }}>{r.ops}</span></div>
+                        <div><span style={{ color: C.dim }}>Data: </span><span style={{ color: C.mut }}>{r.data}</span></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+                  These two missions landed four days apart in March 2025. Blue Ghost transmitted 119 GB; IM-2 Athena transmitted ~250 MB — a 476x difference in data returned. NASA's Joel Kearns called Blue Ghost "an existence proof of how we wanted Commercial Lunar Payload Services to work." IM-3 needs to deliver a similar result to restore confidence in LUNR's execution.
+                </div>
               </div>
             </div>
           </div>}
@@ -431,6 +709,14 @@
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
                         <span style={{ color: C.dim }}>Cost: ${tc.toFixed(0)} → Value: ${cv.toFixed(0)}</span>
                         <span style={{ color: pl >= 0 ? C.grn : C.red, fontWeight: 700 }}>{pl >= 0 ? '+' : ''}${pl.toFixed(0)} ({plP}%)</span>
+                      </div>
+                    )}
+                    {entry.shares > 0 && COST_CONTEXT[entry.ticker] && (
+                      <div style={{ color: C.dim, fontSize: 11, marginTop: 4 }}>{COST_CONTEXT[entry.ticker]}</div>
+                    )}
+                    {entry.shares > 0 && ETFS[entry.ticker] && (
+                      <div style={{ color: C.dim, fontSize: 11, marginTop: 4 }}>
+                        {`At $${(entry.shares * cp).toFixed(0)}, the ${ETFS[entry.ticker].er}% ER costs ~$${(entry.shares * cp * ETFS[entry.ticker].er / 100).toFixed(0)}/year`}
                       </div>
                     )}
                   </div>
