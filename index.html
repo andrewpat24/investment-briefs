@@ -6,9 +6,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Economy Research Platform</title>
-  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/recharts@2.15.0/umd/Recharts.js"></script>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/recharts@2.15.0/Recharts.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     * {
@@ -57,415 +57,426 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    // Check if libraries are loaded
-    console.log('React:', typeof React);
-    console.log('ReactDOM:', typeof ReactDOM);
-    console.log('Recharts:', typeof Recharts);
+    // Wait for all scripts to load
+    function checkLibraries() {
+      console.log('React:', typeof React);
+      console.log('ReactDOM:', typeof ReactDOM);
+      console.log('Recharts:', typeof Recharts);
 
-    if (typeof Recharts === 'undefined') {
-      console.error('Recharts is not loaded!');
-      document.getElementById('root').innerHTML = '<div style="color: red; padding: 20px;">Error: Recharts library failed to load. Please refresh the page.</div>';
+      if (typeof React === 'undefined' || typeof ReactDOM === 'undefined' || typeof Recharts === 'undefined') {
+        console.error('Libraries not loaded yet, retrying...');
+        setTimeout(checkLibraries, 100);
+        return;
+      }
+
+      // All libraries loaded, initialize the app
+      initializeApp();
     }
 
-    const { useState, useMemo } = React;
-    const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, AreaChart, Area } = Recharts;
+    function initializeApp() {
+      try {
+        const { useState, useMemo } = React;
+        const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, AreaChart, Area } = Recharts;
 
-    const C = { bg: "#0a0e1a", card: "#111827", bdr: "#1f2937", acc: "#3b82f6", grn: "#10b981", red: "#ef4444", yel: "#f59e0b", pur: "#8b5cf6", cyan: "#06b6d4", mut: "#9ca3af", dim: "#6b7280", txt: "#e5e7eb" };
-    const COLORS = [C.acc, C.grn, C.pur, C.yel, C.cyan];
+        const C = { bg: "#0a0e1a", card: "#111827", bdr: "#1f2937", acc: "#3b82f6", grn: "#10b981", red: "#ef4444", yel: "#f59e0b", pur: "#8b5cf6", cyan: "#06b6d4", mut: "#9ca3af", dim: "#6b7280", txt: "#e5e7eb" };
+        const COLORS = [C.acc, C.grn, C.pur, C.yel, C.cyan];
 
-    const STOCKS = {
-      LUNR: { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9 },
-      RKLB: { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7 },
-      FLY: { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8 },
-    };
-    const ETFS = {
-      UFO: { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30 },
-      ARKX: { name: "ARK Space & Defense", price: 32.40, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35 },
-    };
-    const ALL = { ...STOCKS, ...ETFS };
-
-    const CATALYSTS = [
-      { event: "LUNR Earnings(Q4)", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "$175M raise impact, IM - 3 timeline update, LTV proposal status, Lanteris integration progress" },
-      { event: "LTV Contract Award", date: "Q1 - Q2 2026", impact: "Critical", type: "Contract", detail: "Up to $4.6B total value. LUNR Moon RACER vs Lunar Outpost Eagle vs Astrolab FLEX. NASA indicated 'coming weeks' as of Jan 2026" },
-      { event: "IM - 3 Mission Launch", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Reiner Gamma landing. Carries CADRE rovers + Khon - 2 relay satellite. Must land upright after two consecutive hard landings" },
-      { event: "RKLB Neutron First Launch", date: "Late 2026", impact: "High", type: "Mission", detail: "Medium - lift vehicle debut. Delayed from 2025. Key to competing with Falcon 9 for constellation deployment" },
-      { event: "SpaceX IPO / Starlink Spin - off", date: "TBD 2026 - 27", impact: "Sector", type: "Catalyst", detail: "Could pull massive capital into space sector. Rising tide lifts all boats — or creates a gravity well that sucks liquidity from smaller names" },
-      { event: "Artemis III Crewed Landing", date: "2028 target", impact: "Sector", type: "Mission", detail: "Trump exec order: return to Moon by 2028. Permanent outpost by 2030. LTV needed for surface ops" },
-    ];
-
-    const TABS = ["Overview", "Portfolio", "Catalysts", "Sensitivity", "Cost Basis"];
-    const pct = (c, p) => ((c - p) / p * 100).toFixed(2);
-
-    function App() {
-      const [tab, setTab] = useState("Overview");
-      const [budget, setBudget] = useState(15000);
-      const [alloc, setAlloc] = useState({ LUNR: 25, RKLB: 25, FLY: 15, UFO: 20, ARKX: 15 });
-      const [sensTarget, setSensTarget] = useState("LUNR");
-      const [costEntries, setCostEntries] = useState(
-        Object.keys(ALL).map(t => ({ ticker: t, shares: 0, avgCost: 0 }))
-      );
-
-      const totalAlloc = useMemo(() => Object.values(alloc).reduce((a, b) => a + b, 0), [alloc]);
-
-      const portfolioData = useMemo(() =>
-        Object.entries(alloc).map(([t, v]) => {
-          const p = ALL[t]?.price || 0;
-          const d = budget * (v / totalAlloc);
-          return { ticker: t, name: ALL[t]?.name, pct: v, dollars: d, shares: p > 0 ? d / p : 0, price: p };
-        })
-        , [alloc, budget, totalAlloc]);
-
-      const scenarios = useMemo(() => {
-        const m = {
-          bull: { LUNR: 2.5, RKLB: 1.8, FLY: 3.0, UFO: 1.6, ARKX: 1.5 },
-          base: { LUNR: 1.3, RKLB: 1.3, FLY: 1.5, UFO: 1.2, ARKX: 1.2 },
-          bear: { LUNR: 0.4, RKLB: 0.7, FLY: 0.3, UFO: 0.75, ARKX: 0.8 },
+        const STOCKS = {
+          LUNR: { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9 },
+          RKLB: { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7 },
+          FLY: { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8 },
+          LUNR: { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9 },
+          RKLB: { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7 },
+          FLY: { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8 },
         };
-        return Object.entries(m).map(([s, mul]) => {
-          let v = 0; portfolioData.forEach(p => { v += p.shares * p.price * (mul[p.ticker] || 1) });
-          return { scenario: s[0].toUpperCase() + s.slice(1), value: v, ret: ((v - budget) / budget * 100).toFixed(1) };
-        });
-      }, [portfolioData, budget]);
+        const ETFS = {
+          UFO: { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30 },
+          ARKX: { name: "ARK Space & Defense", price: 32.40, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35 },
+        };
+        const ALL = { ...STOCKS, ...ETFS };
 
-      const sensitivityData = useMemo(() => {
-        const pts = [];
-        for (let chg = -50; chg <= 100; chg += 5) {
-          let pv = 0;
-          portfolioData.forEach(p => { pv += p.shares * p.price * (p.ticker === sensTarget ? (1 + chg / 100) : 1) });
-          pts.push({ change: `${chg >= 0 ? '+' : ''}${chg}%`, pctChange: chg, value: pv, ret: ((pv - budget) / budget * 100).toFixed(1) });
-        }
-        return pts;
-      }, [sensTarget, portfolioData, budget]);
+        const CATALYSTS = [
+          { event: "LUNR Earnings(Q4)", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "$175M raise impact, IM - 3 timeline update, LTV proposal status, Lanteris integration progress" },
+          { event: "LTV Contract Award", date: "Q1 - Q2 2026", impact: "Critical", type: "Contract", detail: "Up to $4.6B total value. LUNR Moon RACER vs Lunar Outpost Eagle vs Astrolab FLEX. NASA indicated 'coming weeks' as of Jan 2026" },
+          { event: "IM - 3 Mission Launch", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Reiner Gamma landing. Carries CADRE rovers + Khon - 2 relay satellite. Must land upright after two consecutive hard landings" },
+          { event: "RKLB Neutron First Launch", date: "Late 2026", impact: "High", type: "Mission", detail: "Medium - lift vehicle debut. Delayed from 2025. Key to competing with Falcon 9 for constellation deployment" },
+          { event: "SpaceX IPO / Starlink Spin - off", date: "TBD 2026 - 27", impact: "Sector", type: "Catalyst", detail: "Could pull massive capital into space sector. Rising tide lifts all boats — or creates a gravity well that sucks liquidity from smaller names" },
+          { event: "Artemis III Crewed Landing", date: "2028 target", impact: "Sector", type: "Mission", detail: "Trump exec order: return to Moon by 2028. Permanent outpost by 2030. LTV needed for surface ops" },
+        ];
 
-      const rebalTriggers = useMemo(() => {
-        const totalVal = portfolioData.reduce((a, x) => a + x.shares * x.price, 0);
-        return portfolioData.map(p => {
-          const tgt = p.pct / totalAlloc * 100;
-          const cur = totalVal > 0 ? (p.shares * p.price / totalVal * 100) : 0;
-          const drift = cur - tgt;
-          return { ...p, targetPct: tgt, curPct: cur, drift, needsRebal: Math.abs(drift) > 5 };
-        });
-      }, [portfolioData, totalAlloc]);
+        const TABS = ["Overview", "Portfolio", "Catalysts", "Sensitivity", "Cost Basis"];
+        const pct = (c, p) => ((c - p) / p * 100).toFixed(2);
 
-      const ttStyle = { background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 8, color: "#fff", fontSize: 12 };
+        function App() {
+          const [tab, setTab] = useState("Overview");
+          const [budget, setBudget] = useState(15000);
+          const [alloc, setAlloc] = useState({ LUNR: 25, RKLB: 25, FLY: 15, UFO: 20, ARKX: 15 });
+          const [sensTarget, setSensTarget] = useState("LUNR");
+          const [costEntries, setCostEntries] = useState(
+            Object.keys(ALL).map(t => ({ ticker: t, shares: 0, avgCost: 0 }))
+          );
 
-      const Pill = ({ active, label, onClick }) => (
-        <button onClick={onClick} style={{ padding: "6px 16px", borderRadius: 20, border: `1px solid ${active ? C.acc : C.bdr}`, background: active ? "rgba(59,130,246,0.15)" : "transparent", color: active ? C.acc : C.mut, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{label}</button>
-      );
+          const totalAlloc = useMemo(() => Object.values(alloc).reduce((a, b) => a + b, 0), [alloc]);
 
-      const StatCard = ({ label, value, sub, color }) => (
-        <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "14px 16px", flex: 1, minWidth: 140 }}>
-          <div style={{ color: C.dim, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
-          <div style={{ color: color || "#fff", fontSize: 22, fontWeight: 700, marginTop: 4 }}>{value}</div>
-          {sub && <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{sub}</div>}
-        </div>
-      );
+          const portfolioData = useMemo(() =>
+            Object.entries(alloc).map(([t, v]) => {
+              const p = ALL[t]?.price || 0;
+              const d = budget * (v / totalAlloc);
+              return { ticker: t, name: ALL[t]?.name, pct: v, dollars: d, shares: p > 0 ? d / p : 0, price: p };
+            })
+            , [alloc, budget, totalAlloc]);
 
-      const StockRow = ({ ticker, data, isETF }) => {
-        const chg = isETF ? null : pct(data.price, data.prev);
-        return (
-          <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderBottom: `1px solid ${C.bdr}`, gap: 12 }}>
-            <div style={{ minWidth: 56 }}><span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{ticker}</span></div>
-            <div style={{ flex: 1 }}>
-              <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{data.name}</div>
-              <div style={{ color: C.dim, fontSize: 11 }}>{isETF ? `ER: ${data.er}% | AUM: ${data.aum}` : `${data.sector} | MCap: ${data.mc}`}</div>
+          const scenarios = useMemo(() => {
+            const m = {
+              bull: { LUNR: 2.5, RKLB: 1.8, FLY: 3.0, UFO: 1.6, ARKX: 1.5 },
+              base: { LUNR: 1.3, RKLB: 1.3, FLY: 1.5, UFO: 1.2, ARKX: 1.2 },
+              bear: { LUNR: 0.4, RKLB: 0.7, FLY: 0.3, UFO: 0.75, ARKX: 0.8 },
+            };
+            return Object.entries(m).map(([s, mul]) => {
+              let v = 0; portfolioData.forEach(p => { v += p.shares * p.price * (mul[p.ticker] || 1) });
+              return { scenario: s[0].toUpperCase() + s.slice(1), value: v, ret: ((v - budget) / budget * 100).toFixed(1) };
+            });
+          }, [portfolioData, budget]);
+
+          const sensitivityData = useMemo(() => {
+            const pts = [];
+            for (let chg = -50; chg <= 100; chg += 5) {
+              let pv = 0;
+              portfolioData.forEach(p => { pv += p.shares * p.price * (p.ticker === sensTarget ? (1 + chg / 100) : 1) });
+              pts.push({ change: `${chg >= 0 ? '+' : ''}${chg}%`, pctChange: chg, value: pv, ret: ((pv - budget) / budget * 100).toFixed(1) });
+            }
+            return pts;
+          }, [sensTarget, portfolioData, budget]);
+
+          const rebalTriggers = useMemo(() => {
+            const totalVal = portfolioData.reduce((a, x) => a + x.shares * x.price, 0);
+            return portfolioData.map(p => {
+              const tgt = p.pct / totalAlloc * 100;
+              const cur = totalVal > 0 ? (p.shares * p.price / totalVal * 100) : 0;
+              const drift = cur - tgt;
+              return { ...p, targetPct: tgt, curPct: cur, drift, needsRebal: Math.abs(drift) > 5 };
+            });
+          }, [portfolioData, totalAlloc]);
+
+          const ttStyle = { background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 8, color: "#fff", fontSize: 12 };
+
+          const Pill = ({ active, label, onClick }) => (
+            <button onClick={onClick} style={{ padding: "6px 16px", borderRadius: 20, border: `1px solid ${active ? C.acc : C.bdr}`, background: active ? "rgba(59,130,246,0.15)" : "transparent", color: active ? C.acc : C.mut, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{label}</button>
+          );
+
+          const StatCard = ({ label, value, sub, color }) => (
+            <div style={{ background: C.card, border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "14px 16px", flex: 1, minWidth: 140 }}>
+              <div style={{ color: C.dim, fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
+              <div style={{ color: color || "#fff", fontSize: 22, fontWeight: 700, marginTop: 4 }}>{value}</div>
+              {sub && <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{sub}</div>}
             </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>${data.price.toFixed(2)}</div>
-              {chg && <div style={{ color: chg >= 0 ? C.grn : C.red, fontSize: 12 }}>{chg >= 0 ? '+' : ''}{chg}%</div>}
-              {isETF && <div style={{ color: C.grn, fontSize: 12 }}>YTD: +{data.ytd}%</div>}
-            </div>
-          </div>
-        );
-      };
+          );
 
-      return (
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "20px 16px" }}>
-          <div style={{ marginBottom: 20 }}>
-            <h1 style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>🚀 Space Economy Research Platform</h1>
-            <div style={{ color: C.dim, fontSize: 12, marginTop: 4 }}>Live data as of Feb 28, 2026 · $15K portfolio modeling · Not financial advice</div>
-
-            {/* ===== OVERVIEW ===== */}
-            {tab === "Overview" && <div>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
-                {Object.entries(STOCKS).map(([t, d]) => (
-                  <StatCard key={t} label={t} value={`$${d.price} `} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} />
-                ))}
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, marginBottom: 16 }}>
-                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr} ` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Individual Stocks</span></div>
-                {Object.entries(STOCKS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} />)}
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, marginBottom: 16 }}>
-                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr} ` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Space ETFs</span></div>
-                {Object.entries(ETFS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} isETF />)}
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Analyst Price Targets vs Current</div>
-                <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={Object.entries(STOCKS).map(([t, d]) => ({ ticker: t, current: d.price, target: d.ptAvg }))}>
-                    <XAxis dataKey="ticker" stroke={C.dim} fontSize={12} />
-                    <YAxis stroke={C.dim} fontSize={11} />
-                    <Tooltip contentStyle={ttStyle} />
-                    <Bar dataKey="current" fill={C.acc} name="Current" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="target" fill={C.grn} name="Avg Target" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-                <div style={{ display: "flex", gap: 16, marginTop: 8, justifyContent: "center" }}>
-                  {Object.entries(STOCKS).map(([t, d]) => {
-                    const u = ((d.ptAvg - d.price) / d.price * 100).toFixed(0);
-                    return <span key={t} style={{ color: u > 0 ? C.grn : C.red, fontSize: 12 }}>{t}: {u > 0 ? '+' : ''}{u}% to target</span>;
-                  })}
+          const StockRow = ({ ticker, data, isETF }) => {
+            const chg = isETF ? null : pct(data.price, data.prev);
+            return (
+              <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderBottom: `1px solid ${C.bdr}`, gap: 12 }}>
+                <div style={{ minWidth: 56 }}><span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{ticker}</span></div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{data.name}</div>
+                  <div style={{ color: C.dim, fontSize: 11 }}>{isETF ? `ER: ${data.er}% | AUM: ${data.aum}` : `${data.sector} | MCap: ${data.mc}`}</div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>${data.price.toFixed(2)}</div>
+                  {chg && <div style={{ color: chg >= 0 ? C.grn : C.red, fontSize: 12 }}>{chg >= 0 ? '+' : ''}{chg}%</div>}
+                  {isETF && <div style={{ color: C.grn, fontSize: 12 }}>YTD: +{data.ytd}%</div>}
                 </div>
               </div>
+            );
+          };
 
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Risk Profile Comparison</div>
-                <ResponsiveContainer width="100%" height={250}>
-                  <RadarChart data={[
-                    { metric: "Beta", LUNR: STOCKS.LUNR.beta / 3 * 10, RKLB: STOCKS.RKLB.beta / 3 * 10, FLY: STOCKS.FLY.beta / 3 * 10 },
-                    { metric: "Risk Score", LUNR: STOCKS.LUNR.risk, RKLB: STOCKS.RKLB.risk, FLY: STOCKS.FLY.risk },
-                    { metric: "Upside %", LUNR: Math.min(((STOCKS.LUNR.ptHigh - STOCKS.LUNR.price) / STOCKS.LUNR.price * 10), 10), RKLB: Math.min(((STOCKS.RKLB.ptHigh - STOCKS.RKLB.price) / STOCKS.RKLB.price * 10), 10), FLY: Math.min(((STOCKS.FLY.ptHigh - STOCKS.FLY.price) / STOCKS.FLY.price * 10), 10) },
-                    { metric: "52w Range", LUNR: ((STOCKS.LUNR.price - STOCKS.LUNR.w52l) / (STOCKS.LUNR.w52h - STOCKS.LUNR.w52l)) * 10, RKLB: ((STOCKS.RKLB.price - STOCKS.RKLB.w52l) / (STOCKS.RKLB.w52h - STOCKS.RKLB.w52l)) * 10, FLY: ((STOCKS.FLY.price - STOCKS.FLY.w52l) / (STOCKS.FLY.w52h - STOCKS.FLY.w52l)) * 10 },
-                    { metric: "Volatility", LUNR: 8, RKLB: 7, FLY: 9 },
-                  ]}>
-                    <PolarGrid stroke={C.bdr} />
-                    <PolarAngleAxis dataKey="metric" stroke={C.dim} fontSize={11} />
-                    <PolarRadiusAxis domain={[0, 10]} tick={false} axisLine={false} />
-                    <Radar name="LUNR" dataKey="LUNR" stroke={C.acc} fill={C.acc} fillOpacity={0.15} />
-                    <Radar name="RKLB" dataKey="RKLB" stroke={C.grn} fill={C.grn} fillOpacity={0.15} />
-                    <Radar name="FLY" dataKey="FLY" stroke={C.pur} fill={C.pur} fillOpacity={0.15} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: C.mut }} />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>}
+          return (
+            <div style={{ maxWidth: 900, margin: "0 auto", padding: "20px 16px" }}>
+              <div style={{ marginBottom: 20 }}>
+                <h1 style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>🚀 Space Economy Research Platform</h1>
+                <div style={{ color: C.dim, fontSize: 12, marginTop: 4 }}>Live data as of Feb 28, 2026 · $15K portfolio modeling · Not financial advice</div>
 
-            {/* ===== PORTFOLIO ===== */}
-            {tab === "Portfolio" && <div>
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Portfolio Allocation — ${budget.toLocaleString()}</span>
-                  <input type="number" value={budget} onChange={e => setBudget(Number(e.target.value) || 0)} style={{ background: C.bg, border: `1px solid ${C.bdr} `, borderRadius: 6, padding: "4px 10px", color: "#fff", width: 100, fontSize: 13 }} />
-                </div>
-                {Object.entries(alloc).map(([t, v]) => (
-                  <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                    <span style={{ color: C.acc, fontWeight: 700, fontSize: 13, minWidth: 48 }}>{t}</span>
-                    <input type="range" min={0} max={60} value={v} onChange={e => setAlloc(p => ({ ...p, [t]: Number(e.target.value) }))} style={{ flex: 1 }} />
-                    <span style={{ color: "#fff", fontSize: 13, minWidth: 36, textAlign: "right" }}>{v}%</span>
-                    <span style={{ color: C.dim, fontSize: 11, minWidth: 70, textAlign: "right" }}>${(budget * v / totalAlloc).toFixed(0)}</span>
+                {/* ===== OVERVIEW ===== */}
+                {tab === "Overview" && <div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
+                    {Object.entries(STOCKS).map(([t, d]) => (
+                      <StatCard key={t} label={t} value={`$${d.price} `} sub={`${pct(d.price, d.prev)}% today`} color={d.price >= d.prev ? C.grn : C.red} />
+                    ))}
                   </div>
-                ))}
-              </div>
 
-              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
-                <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, flex: 1, minWidth: 250 }}>
-                  <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Allocation</div>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <PieChart>
-                      <Pie data={portfolioData} dataKey="dollars" nameKey="ticker" cx="50%" cy="50%" outerRadius={80} strokeWidth={2} stroke={C.bg}>
-                        {portfolioData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
-                      </Pie>
-                      <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)} `} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, flex: 1, minWidth: 250 }}>
-                  <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Share Breakdown</div>
-                  {portfolioData.map((p, i) => (
-                    <div key={p.ticker} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${C.bdr} ` }}>
-                      <span style={{ color: COLORS[i], fontWeight: 600, fontSize: 13 }}>{p.ticker}</span>
-                      <span style={{ color: C.mut, fontSize: 12 }}>{p.shares.toFixed(1)} sh @ ${p.price.toFixed(2)}</span>
-                      <span style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>${p.dollars.toFixed(0)}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>12-Month Scenario Analysis</div>
-                <ResponsiveContainer width="100%" height={180}>
-                  <BarChart data={scenarios} layout="vertical">
-                    <XAxis type="number" stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)} k`} />
-                    <YAxis type="category" dataKey="scenario" stroke={C.dim} fontSize={12} width={50} />
-                    <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)} `} />
-                    <Bar dataKey="value" radius={[0, 6, 6, 0]}>
-                      {scenarios.map((_, i) => <Cell key={i} fill={[C.grn, C.yel, C.red][i]} />)}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-                <div style={{ display: "flex", justifyContent: "space-around", marginTop: 8 }}>
-                  {scenarios.map((s, i) => (
-                    <div key={s.scenario} style={{ textAlign: "center" }}>
-                      <div style={{ color: [C.grn, C.yel, C.red][i], fontSize: 18, fontWeight: 700 }}>{s.ret > 0 ? '+' : ''}{s.ret}%</div>
-                      <div style={{ color: C.dim, fontSize: 11 }}>${Number(s.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Rebalance Monitor</div>
-                <div style={{ color: C.dim, fontSize: 11, marginBottom: 12 }}>Triggers at ±5% drift from target allocation</div>
-                {rebalTriggers.map((r, i) => (
-                  <div key={r.ticker} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, padding: "8px 12px", background: r.needsRebal ? "rgba(239,68,68,0.08)" : "transparent", borderRadius: 8, border: `1px solid ${r.needsRebal ? "rgba(239,68,68,0.3)" : "transparent"} ` }}>
-                    <span style={{ color: COLORS[i], fontWeight: 700, fontSize: 13, minWidth: 48 }}>{r.ticker}</span>
-                    <div style={{ flex: 1, height: 6, background: C.bg, borderRadius: 3, position: "relative", overflow: "hidden" }}>
-                      <div style={{ width: `${r.targetPct}% `, height: "100%", background: C.bdr, borderRadius: 3 }} />
-                      <div style={{ position: "absolute", left: `${Math.max(0, Math.min(r.curPct, 100))}% `, top: -2, width: 2, height: 10, background: "#fff", borderRadius: 1 }} />
-                    </div>
-                    <span style={{ color: C.mut, fontSize: 11, minWidth: 80 }}>Target: {r.targetPct.toFixed(1)}%</span>
-                    <span style={{ color: Math.abs(r.drift) > 5 ? C.red : C.grn, fontSize: 12, fontWeight: 600, minWidth: 60 }}>{r.drift >= 0 ? '+' : ''}{r.drift.toFixed(1)}%</span>
-                    {r.needsRebal && <span style={{ color: C.red, fontSize: 10, fontWeight: 700, background: "rgba(239,68,68,0.15)", padding: "2px 6px", borderRadius: 4 }}>REBAL</span>}
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, marginBottom: 16 }}>
+                    <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr} ` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Individual Stocks</span></div>
+                    {Object.entries(STOCKS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} />)}
                   </div>
-                ))}
-              </div>
-            </div>}
 
-            {/* ===== CATALYSTS ===== */}
-            {tab === "Catalysts" && <div>
-              <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Catalyst Calendar</div>
-              <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>Next 6-12 months = most concentrated binary-event window LUNR will face</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-                {CATALYSTS.map((c, i) => (
-                  <div key={i} style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 10, padding: 14, display: "flex", gap: 12 }}>
-                    <div style={{ minWidth: 60, textAlign: "center" }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: c.impact === "Critical" ? C.red : c.impact === "Sector" ? C.pur : C.yel, background: c.impact === "Critical" ? "rgba(239,68,68,0.15)" : c.impact === "Sector" ? "rgba(139,92,246,0.15)" : "rgba(245,158,11,0.15)", padding: "2px 6px", borderRadius: 4 }}>{c.impact}</div>
-                      <div style={{ color: C.dim, fontSize: 10, marginTop: 4 }}>{c.type}</div>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span style={{ color: "#fff", fontWeight: 600, fontSize: 13 }}>{c.event}</span>
-                        <span style={{ color: C.acc, fontSize: 12 }}>{c.date}</span>
-                      </div>
-                      <div style={{ color: C.mut, fontSize: 11, lineHeight: 1.6 }}>{c.detail}</div>
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, marginBottom: 16 }}>
+                    <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.bdr} ` }}><span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Space ETFs</span></div>
+                    {Object.entries(ETFS).map(([t, d]) => <StockRow key={t} ticker={t} data={d} isETF />)}
+                  </div>
+
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Analyst Price Targets vs Current</div>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <BarChart data={Object.entries(STOCKS).map(([t, d]) => ({ ticker: t, current: d.price, target: d.ptAvg }))}>
+                        <XAxis dataKey="ticker" stroke={C.dim} fontSize={12} />
+                        <YAxis stroke={C.dim} fontSize={11} />
+                        <Tooltip contentStyle={ttStyle} />
+                        <Bar dataKey="current" fill={C.acc} name="Current" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="target" fill={C.grn} name="Avg Target" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div style={{ display: "flex", gap: 16, marginTop: 8, justifyContent: "center" }}>
+                      {Object.entries(STOCKS).map(([t, d]) => {
+                        const u = ((d.ptAvg - d.price) / d.price * 100).toFixed(0);
+                        return <span key={t} style={{ color: u > 0 ? C.grn : C.red, fontSize: 12 }}>{t}: {u > 0 ? '+' : ''}{u}% to target</span>;
+                      })}
                     </div>
                   </div>
-                ))}
-              </div>
 
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Structural View</div>
-                <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7 }}>
-                  LUNR at ~${STOCKS.LUNR.price} trades at the cheapest P/S ratio among pure-play lunar names, but the discount exists for a reason — two hard landings and heavy insider selling (CEO Altemus sold 3M+ shares in 6 months). The recent $175M raise at $15.12/share further dilutes. The bull case requires: (1) IM-3 lands upright, proving the engineering fixes work, (2) LTV goes to LUNR's Moon RACER, unlocking $600M+ initial phase, (3) $175M raise is the last dilutive event before revenue ramp from NSNS. The bear case: IM-3 fails, LTV goes to Lunar Outpost, converts dilute into a declining stock.
-                </div>
-                <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7, marginTop: 12 }}>
-                  RKLB is the sector's blue chip at $69 with a $39B market cap — expensive but backed by $602M record Q4 revenue and an $816M SDA contract. Neutron delay to late 2026 is the key risk. FLY at $20 is interesting: successful Blue Ghost lunar landing gives it credibility LUNR lacks, but the stock has cratered 72% from its $73.80 high.
-                </div>
-              </div>
-            </div>}
-
-            {/* ===== SENSITIVITY ===== */}
-            {tab === "Sensitivity" && <div>
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Single-Stock Sensitivity Analysis</div>
-                <div style={{ color: C.dim, fontSize: 12, marginBottom: 12 }}>How does a move in one position affect your total portfolio?</div>
-                <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
-                  {Object.keys(ALL).map(t => <Pill key={t} label={t} active={sensTarget === t} onClick={() => setSensTarget(t)} />)}
-                </div>
-                <ResponsiveContainer width="100%" height={280}>
-                  <AreaChart data={sensitivityData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={C.bdr} />
-                    <XAxis dataKey="change" stroke={C.dim} fontSize={10} interval={3} />
-                    <YAxis stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)} k`} />
-                    <Tooltip contentStyle={ttStyle} formatter={(v, name) => name === "value" ? `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })} ` : `${v}% `} />
-                    <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={C.acc} stopOpacity={0.3} /><stop offset="100%" stopColor={C.acc} stopOpacity={0} /></linearGradient></defs>
-                    <Area type="monotone" dataKey="value" stroke={C.acc} fill="url(#grad)" strokeWidth={2} name="value" />
-                  </AreaChart>
-                </ResponsiveContainer>
-                <div style={{ textAlign: "center", color: C.dim, fontSize: 11, marginTop: 8 }}>{sensTarget} price change → total portfolio value (other positions held constant)</div>
-              </div>
-
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Stress Test: Sector-Wide Scenarios</div>
-                {[
-                  { label: "🟢 SpaceX IPO Hype", mults: { LUNR: 1.4, RKLB: 1.6, FLY: 1.5, UFO: 1.4, ARKX: 1.3 } },
-                  { label: "🔴 IM-3 Fails + LTV to Competitor", mults: { LUNR: 0.35, RKLB: 0.9, FLY: 1.1, UFO: 0.85, ARKX: 0.9 } },
-                  { label: "🟡 Broad Space Selloff (Rates Up)", mults: { LUNR: 0.7, RKLB: 0.65, FLY: 0.6, UFO: 0.7, ARKX: 0.75 } },
-                  { label: "🟢 LUNR Lands + Wins LTV", mults: { LUNR: 3.0, RKLB: 1.1, FLY: 0.85, UFO: 1.15, ARKX: 1.1 } },
-                ].map((sc, si) => {
-                  let v = 0; portfolioData.forEach(p => { v += p.shares * p.price * (sc.mults[p.ticker] || 1) });
-                  const ret = ((v - budget) / budget * 100).toFixed(1);
-                  return (
-                    <div key={si} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: si < 3 ? `1px solid ${C.bdr} ` : "none" }}>
-                      <span style={{ color: "#fff", fontSize: 13 }}>{sc.label}</span>
-                      <div style={{ textAlign: "right" }}>
-                        <span style={{ color: ret >= 0 ? C.grn : C.red, fontSize: 15, fontWeight: 700 }}>{ret >= 0 ? '+' : ''}{ret}%</span>
-                        <span style={{ color: C.dim, fontSize: 11, marginLeft: 8 }}>${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>}
-
-            {/* ===== COST BASIS ===== */}
-            {tab === "Cost Basis" && <div>
-              <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Cost Basis Tracker</div>
-                <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>Enter your actual positions to track P&L</div>
-                {costEntries.map((entry, i) => {
-                  const cp = ALL[entry.ticker]?.price || 0;
-                  const tc = entry.shares * entry.avgCost;
-                  const cv = entry.shares * cp;
-                  const pl = cv - tc;
-                  const plP = tc > 0 ? ((pl / tc) * 100).toFixed(1) : "0.0";
-                  return (
-                    <div key={entry.ticker} style={{ marginBottom: 12, padding: 12, background: C.bg, borderRadius: 8, border: `1px solid ${C.bdr} ` }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                        <span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{entry.ticker}</span>
-                        <span style={{ color: "#fff", fontSize: 12 }}>Current: ${cp.toFixed(2)}</span>
-                      </div>
-                      <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
-                        <div style={{ flex: 1 }}>
-                          <label style={{ color: C.dim, fontSize: 10, display: "block", marginBottom: 2 }}>Shares</label>
-                          <input type="number" value={entry.shares || ""} placeholder="0" onChange={e => { const v = [...costEntries]; v[i].shares = Number(e.target.value) || 0; setCostEntries(v) }} style={{ width: "100%", background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 4, padding: "4px 8px", color: "#fff", fontSize: 13 }} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <label style={{ color: C.dim, fontSize: 10, display: "block", marginBottom: 2 }}>Avg Cost</label>
-                          <input type="number" value={entry.avgCost || ""} placeholder="0.00" step="0.01" onChange={e => { const v = [...costEntries]; v[i].avgCost = Number(e.target.value) || 0; setCostEntries(v) }} style={{ width: "100%", background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 4, padding: "4px 8px", color: "#fff", fontSize: 13 }} />
-                        </div>
-                      </div>
-                      {entry.shares > 0 && entry.avgCost > 0 && (
-                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
-                          <span style={{ color: C.dim }}>Cost: ${tc.toFixed(0)} → Value: ${cv.toFixed(0)}</span>
-                          <span style={{ color: pl >= 0 ? C.grn : C.red, fontWeight: 700 }}>{pl >= 0 ? '+' : ''}${pl.toFixed(0)} ({plP}%)</span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {costEntries.some(e => e.shares > 0 && e.avgCost > 0) && (() => {
-                let tc = 0, tv = 0;
-                costEntries.forEach(e => { tc += e.shares * e.avgCost; tv += e.shares * (ALL[e.ticker]?.price || 0) });
-                const pl = tv - tc; const plP = tc > 0 ? ((pl / tc) * 100).toFixed(1) : "0.0";
-                return (
                   <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
-                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Portfolio Summary</div>
-                    <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                      <StatCard label="Total Cost" value={`$${tc.toLocaleString(undefined, { maximumFractionDigits: 0 })} `} />
-                      <StatCard label="Current Value" value={`$${tv.toLocaleString(undefined, { maximumFractionDigits: 0 })} `} />
-                      <StatCard label="Total P&L" value={`${pl >= 0 ? '+' : ''}$${pl.toFixed(0)} `} sub={`${plP}% `} color={pl >= 0 ? C.grn : C.red} />
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Risk Profile Comparison</div>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <RadarChart data={[
+                        { metric: "Beta", LUNR: STOCKS.LUNR.beta / 3 * 10, RKLB: STOCKS.RKLB.beta / 3 * 10, FLY: STOCKS.FLY.beta / 3 * 10 },
+                        { metric: "Risk Score", LUNR: STOCKS.LUNR.risk, RKLB: STOCKS.RKLB.risk, FLY: STOCKS.FLY.risk },
+                        { metric: "Upside %", LUNR: Math.min(((STOCKS.LUNR.ptHigh - STOCKS.LUNR.price) / STOCKS.LUNR.price * 10), 10), RKLB: Math.min(((STOCKS.RKLB.ptHigh - STOCKS.RKLB.price) / STOCKS.RKLB.price * 10), 10), FLY: Math.min(((STOCKS.FLY.ptHigh - STOCKS.FLY.price) / STOCKS.FLY.price * 10), 10) },
+                        { metric: "52w Range", LUNR: ((STOCKS.LUNR.price - STOCKS.LUNR.w52l) / (STOCKS.LUNR.w52h - STOCKS.LUNR.w52l)) * 10, RKLB: ((STOCKS.RKLB.price - STOCKS.RKLB.w52l) / (STOCKS.RKLB.w52h - STOCKS.RKLB.w52l)) * 10, FLY: ((STOCKS.FLY.price - STOCKS.FLY.w52l) / (STOCKS.FLY.w52h - STOCKS.FLY.w52l)) * 10 },
+                        { metric: "Volatility", LUNR: 8, RKLB: 7, FLY: 9 },
+                      ]}>
+                        <PolarGrid stroke={C.bdr} />
+                        <PolarAngleAxis dataKey="metric" stroke={C.dim} fontSize={11} />
+                        <PolarRadiusAxis domain={[0, 10]} tick={false} axisLine={false} />
+                        <Radar name="LUNR" dataKey="LUNR" stroke={C.acc} fill={C.acc} fillOpacity={0.15} />
+                        <Radar name="RKLB" dataKey="RKLB" stroke={C.grn} fill={C.grn} fillOpacity={0.15} />
+                        <Radar name="FLY" dataKey="FLY" stroke={C.pur} fill={C.pur} fillOpacity={0.15} />
+                        <Legend wrapperStyle={{ fontSize: 11, color: C.mut }} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>}
+
+                {/* ===== PORTFOLIO ===== */}
+                {tab === "Portfolio" && <div>
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Portfolio Allocation — ${budget.toLocaleString()}</span>
+                      <input type="number" value={budget} onChange={e => setBudget(Number(e.target.value) || 0)} style={{ background: C.bg, border: `1px solid ${C.bdr} `, borderRadius: 6, padding: "4px 10px", color: "#fff", width: 100, fontSize: 13 }} />
+                    </div>
+                    {Object.entries(alloc).map(([t, v]) => (
+                      <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                        <span style={{ color: C.acc, fontWeight: 700, fontSize: 13, minWidth: 48 }}>{t}</span>
+                        <input type="range" min={0} max={60} value={v} onChange={e => setAlloc(p => ({ ...p, [t]: Number(e.target.value) }))} style={{ flex: 1 }} />
+                        <span style={{ color: "#fff", fontSize: 13, minWidth: 36, textAlign: "right" }}>{v}%</span>
+                        <span style={{ color: C.dim, fontSize: 11, minWidth: 70, textAlign: "right" }}>${(budget * v / totalAlloc).toFixed(0)}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
+                    <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, flex: 1, minWidth: 250 }}>
+                      <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Allocation</div>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie data={portfolioData} dataKey="dollars" nameKey="ticker" cx="50%" cy="50%" outerRadius={80} strokeWidth={2} stroke={C.bg}>
+                            {portfolioData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
+                          </Pie>
+                          <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)} `} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, flex: 1, minWidth: 250 }}>
+                      <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Share Breakdown</div>
+                      {portfolioData.map((p, i) => (
+                        <div key={p.ticker} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${C.bdr} ` }}>
+                          <span style={{ color: COLORS[i], fontWeight: 600, fontSize: 13 }}>{p.ticker}</span>
+                          <span style={{ color: C.mut, fontSize: 12 }}>{p.shares.toFixed(1)} sh @ ${p.price.toFixed(2)}</span>
+                          <span style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>${p.dollars.toFixed(0)}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                );
-              })()}
-            </div>}
 
-            <div style={{ textAlign: "center", color: C.dim, fontSize: 10, marginTop: 24, padding: "12px 0", borderTop: `1px solid ${C.bdr}` }}>
-              Research platform for informational purposes only. Not financial advice. Data sourced Feb 28, 2026.
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>12-Month Scenario Analysis</div>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <BarChart data={scenarios} layout="vertical">
+                        <XAxis type="number" stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)} k`} />
+                        <YAxis type="category" dataKey="scenario" stroke={C.dim} fontSize={12} width={50} />
+                        <Tooltip contentStyle={ttStyle} formatter={v => `$${v.toFixed(0)} `} />
+                        <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+                          {scenarios.map((_, i) => <Cell key={i} fill={[C.grn, C.yel, C.red][i]} />)}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div style={{ display: "flex", justifyContent: "space-around", marginTop: 8 }}>
+                      {scenarios.map((s, i) => (
+                        <div key={s.scenario} style={{ textAlign: "center" }}>
+                          <div style={{ color: [C.grn, C.yel, C.red][i], fontSize: 18, fontWeight: 700 }}>{s.ret > 0 ? '+' : ''}{s.ret}%</div>
+                          <div style={{ color: C.dim, fontSize: 11 }}>${Number(s.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Rebalance Monitor</div>
+                    <div style={{ color: C.dim, fontSize: 11, marginBottom: 12 }}>Triggers at ±5% drift from target allocation</div>
+                    {rebalTriggers.map((r, i) => (
+                      <div key={r.ticker} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, padding: "8px 12px", background: r.needsRebal ? "rgba(239,68,68,0.08)" : "transparent", borderRadius: 8, border: `1px solid ${r.needsRebal ? "rgba(239,68,68,0.3)" : "transparent"} ` }}>
+                        <span style={{ color: COLORS[i], fontWeight: 700, fontSize: 13, minWidth: 48 }}>{r.ticker}</span>
+                        <div style={{ flex: 1, height: 6, background: C.bg, borderRadius: 3, position: "relative", overflow: "hidden" }}>
+                          <div style={{ width: `${r.targetPct}% `, height: "100%", background: C.bdr, borderRadius: 3 }} />
+                          <div style={{ position: "absolute", left: `${Math.max(0, Math.min(r.curPct, 100))}% `, top: -2, width: 2, height: 10, background: "#fff", borderRadius: 1 }} />
+                        </div>
+                        <span style={{ color: C.mut, fontSize: 11, minWidth: 80 }}>Target: {r.targetPct.toFixed(1)}%</span>
+                        <span style={{ color: Math.abs(r.drift) > 5 ? C.red : C.grn, fontSize: 12, fontWeight: 600, minWidth: 60 }}>{r.drift >= 0 ? '+' : ''}{r.drift.toFixed(1)}%</span>
+                        {r.needsRebal && <span style={{ color: C.red, fontSize: 10, fontWeight: 700, background: "rgba(239,68,68,0.15)", padding: "2px 6px", borderRadius: 4 }}>REBAL</span>}
+                      </div>
+                    ))}
+                  </div>
+                </div>}
+
+                {/* ===== CATALYSTS ===== */}
+                {tab === "Catalysts" && <div>
+                  <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Catalyst Calendar</div>
+                  <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>Next 6-12 months = most concentrated binary-event window LUNR will face</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+                    {CATALYSTS.map((c, i) => (
+                      <div key={i} style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 10, padding: 14, display: "flex", gap: 12 }}>
+                        <div style={{ minWidth: 60, textAlign: "center" }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: c.impact === "Critical" ? C.red : c.impact === "Sector" ? C.pur : C.yel, background: c.impact === "Critical" ? "rgba(239,68,68,0.15)" : c.impact === "Sector" ? "rgba(139,92,246,0.15)" : "rgba(245,158,11,0.15)", padding: "2px 6px", borderRadius: 4 }}>{c.impact}</div>
+                          <div style={{ color: C.dim, fontSize: 10, marginTop: 4 }}>{c.type}</div>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                            <span style={{ color: "#fff", fontWeight: 600, fontSize: 13 }}>{c.event}</span>
+                            <span style={{ color: C.acc, fontSize: 12 }}>{c.date}</span>
+                          </div>
+                          <div style={{ color: C.mut, fontSize: 11, lineHeight: 1.6 }}>{c.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Structural View</div>
+                    <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7 }}>
+                      LUNR at ~${STOCKS.LUNR.price} trades at the cheapest P/S ratio among pure-play lunar names, but the discount exists for a reason — two hard landings and heavy insider selling (CEO Altemus sold 3M+ shares in 6 months). The recent $175M raise at $15.12/share further dilutes. The bull case requires: (1) IM-3 lands upright, proving the engineering fixes work, (2) LTV goes to LUNR's Moon RACER, unlocking $600M+ initial phase, (3) $175M raise is the last dilutive event before revenue ramp from NSNS. The bear case: IM-3 fails, LTV goes to Lunar Outpost, converts dilute into a declining stock.
+                    </div>
+                    <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7, marginTop: 12 }}>
+                      RKLB is the sector's blue chip at $69 with a $39B market cap — expensive but backed by $602M record Q4 revenue and an $816M SDA contract. Neutron delay to late 2026 is the key risk. FLY at $20 is interesting: successful Blue Ghost lunar landing gives it credibility LUNR lacks, but the stock has cratered 72% from its $73.80 high.
+                    </div>
+                  </div>
+                </div>}
+
+                {/* ===== SENSITIVITY ===== */}
+                {tab === "Sensitivity" && <div>
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Single-Stock Sensitivity Analysis</div>
+                    <div style={{ color: C.dim, fontSize: 12, marginBottom: 12 }}>How does a move in one position affect your total portfolio?</div>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+                      {Object.keys(ALL).map(t => <Pill key={t} label={t} active={sensTarget === t} onClick={() => setSensTarget(t)} />)}
+                    </div>
+                    <ResponsiveContainer width="100%" height={280}>
+                      <AreaChart data={sensitivityData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke={C.bdr} />
+                        <XAxis dataKey="change" stroke={C.dim} fontSize={10} interval={3} />
+                        <YAxis stroke={C.dim} fontSize={11} tickFormatter={v => `$${(v / 1000).toFixed(0)} k`} />
+                        <Tooltip contentStyle={ttStyle} formatter={(v, name) => name === "value" ? `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })} ` : `${v}% `} />
+                        <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={C.acc} stopOpacity={0.3} /><stop offset="100%" stopColor={C.acc} stopOpacity={0} /></linearGradient></defs>
+                        <Area type="monotone" dataKey="value" stroke={C.acc} fill="url(#grad)" strokeWidth={2} name="value" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                    <div style={{ textAlign: "center", color: C.dim, fontSize: 11, marginTop: 8 }}>{sensTarget} price change → total portfolio value (other positions held constant)</div>
+                  </div>
+
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Stress Test: Sector-Wide Scenarios</div>
+                    {[
+                      { label: "🟢 SpaceX IPO Hype", mults: { LUNR: 1.4, RKLB: 1.6, FLY: 1.5, UFO: 1.4, ARKX: 1.3 } },
+                      { label: "🔴 IM-3 Fails + LTV to Competitor", mults: { LUNR: 0.35, RKLB: 0.9, FLY: 1.1, UFO: 0.85, ARKX: 0.9 } },
+                      { label: "🟡 Broad Space Selloff (Rates Up)", mults: { LUNR: 0.7, RKLB: 0.65, FLY: 0.6, UFO: 0.7, ARKX: 0.75 } },
+                      { label: "🟢 LUNR Lands + Wins LTV", mults: { LUNR: 3.0, RKLB: 1.1, FLY: 0.85, UFO: 1.15, ARKX: 1.1 } },
+                    ].map((sc, si) => {
+                      let v = 0; portfolioData.forEach(p => { v += p.shares * p.price * (sc.mults[p.ticker] || 1) });
+                      const ret = ((v - budget) / budget * 100).toFixed(1);
+                      return (
+                        <div key={si} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: si < 3 ? `1px solid ${C.bdr} ` : "none" }}>
+                          <span style={{ color: "#fff", fontSize: 13 }}>{sc.label}</span>
+                          <div style={{ textAlign: "right" }}>
+                            <span style={{ color: ret >= 0 ? C.grn : C.red, fontSize: 15, fontWeight: 700 }}>{ret >= 0 ? '+' : ''}{ret}%</span>
+                            <span style={{ color: C.dim, fontSize: 11, marginLeft: 8 }}>${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>}
+
+                {/* ===== COST BASIS ===== */}
+                {tab === "Cost Basis" && <div>
+                  <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+                    <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Cost Basis Tracker</div>
+                    <div style={{ color: C.dim, fontSize: 12, marginBottom: 16 }}>Enter your actual positions to track P&L</div>
+                    {costEntries.map((entry, i) => {
+                      const cp = ALL[entry.ticker]?.price || 0;
+                      const tc = entry.shares * entry.avgCost;
+                      const cv = entry.shares * cp;
+                      const pl = cv - tc;
+                      const plP = tc > 0 ? ((pl / tc) * 100).toFixed(1) : "0.0";
+                      return (
+                        <div key={entry.ticker} style={{ marginBottom: 12, padding: 12, background: C.bg, borderRadius: 8, border: `1px solid ${C.bdr} ` }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                            <span style={{ color: C.acc, fontWeight: 700, fontSize: 14 }}>{entry.ticker}</span>
+                            <span style={{ color: "#fff", fontSize: 12 }}>Current: ${cp.toFixed(2)}</span>
+                          </div>
+                          <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+                            <div style={{ flex: 1 }}>
+                              <label style={{ color: C.dim, fontSize: 10, display: "block", marginBottom: 2 }}>Shares</label>
+                              <input type="number" value={entry.shares || ""} placeholder="0" onChange={e => { const v = [...costEntries]; v[i].shares = Number(e.target.value) || 0; setCostEntries(v) }} style={{ width: "100%", background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 4, padding: "4px 8px", color: "#fff", fontSize: 13 }} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <label style={{ color: C.dim, fontSize: 10, display: "block", marginBottom: 2 }}>Avg Cost</label>
+                              <input type="number" value={entry.avgCost || ""} placeholder="0.00" step="0.01" onChange={e => { const v = [...costEntries]; v[i].avgCost = Number(e.target.value) || 0; setCostEntries(v) }} style={{ width: "100%", background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 4, padding: "4px 8px", color: "#fff", fontSize: 13 }} />
+                            </div>
+                          </div>
+                          {entry.shares > 0 && entry.avgCost > 0 && (
+                            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                              <span style={{ color: C.dim }}>Cost: ${tc.toFixed(0)} → Value: ${cv.toFixed(0)}</span>
+                              <span style={{ color: pl >= 0 ? C.grn : C.red, fontWeight: 700 }}>{pl >= 0 ? '+' : ''}${pl.toFixed(0)} ({plP}%)</span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {costEntries.some(e => e.shares > 0 && e.avgCost > 0) && (() => {
+                    let tc = 0, tv = 0;
+                    costEntries.forEach(e => { tc += e.shares * e.avgCost; tv += e.shares * (ALL[e.ticker]?.price || 0) });
+                    const pl = tv - tc; const plP = tc > 0 ? ((pl / tc) * 100).toFixed(1) : "0.0";
+                    return (
+                      <div style={{ background: C.card, border: `1px solid ${C.bdr} `, borderRadius: 12, padding: 16 }}>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Portfolio Summary</div>
+                        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                          <StatCard label="Total Cost" value={`$${tc.toLocaleString(undefined, { maximumFractionDigits: 0 })} `} />
+                          <StatCard label="Current Value" value={`$${tv.toLocaleString(undefined, { maximumFractionDigits: 0 })} `} />
+                          <StatCard label="Total P&L" value={`${pl >= 0 ? '+' : ''}$${pl.toFixed(0)} `} sub={`${plP}% `} color={pl >= 0 ? C.grn : C.red} />
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>}
+
+                <div style={{ textAlign: "center", color: C.dim, fontSize: 10, marginTop: 24, padding: "12px 0", borderTop: `1px solid ${C.bdr}` }}>
+                  Research platform for informational purposes only. Not financial advice. Data sourced Feb 28, 2026.
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      );
-    }
+          );
+        }
 
-    ReactDOM.render(<App />, document.getElementById("root"));
+        ReactDOM.render(<App />, document.getElementById("root"));
   </script>
 
 </body>
