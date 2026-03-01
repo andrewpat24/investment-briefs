@@ -6,10 +6,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Economy Research Platform</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.15.0/Recharts.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.15.0/umd/Recharts.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -57,6 +57,16 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
+    // Check if libraries are loaded
+    console.log('React:', typeof React);
+    console.log('ReactDOM:', typeof ReactDOM);
+    console.log('Recharts:', typeof Recharts);
+
+    if (typeof Recharts === 'undefined') {
+      console.error('Recharts is not loaded!');
+      document.getElementById('root').innerHTML = '<div style="color: red; padding: 20px;">Error: Recharts library failed to load. Please refresh the page.</div>';
+    }
+
     const { useState, useMemo } = React;
     const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, AreaChart, Area } = Recharts;
 
