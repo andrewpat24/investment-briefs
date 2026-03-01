@@ -512,20 +512,57 @@
         </div>
       );
 
+      const TradingViewWidget = ({ ticker }) => {
+        const containerId = `tv-${ticker}`;
+        React.useEffect(() => {
+          const container = document.getElementById(containerId);
+          if (!container || container.querySelector('iframe')) return;
+          const script = document.createElement('script');
+          script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+          script.async = true;
+          script.innerHTML = JSON.stringify({
+            symbol: ticker,
+            width: "100%",
+            height: 220,
+            locale: "en",
+            dateRange: "3M",
+            colorTheme: "dark",
+            isTransparent: true,
+            autosize: true,
+            largeChartUrl: ""
+          });
+          container.appendChild(script);
+          return () => { if (container) container.innerHTML = ''; };
+        }, [ticker]);
+
+        return (
+          <div id={containerId} className="tradingview-widget-container"
+            style={{ width: "100%", height: 220, borderTop: `1px solid ${C.bdr}` }}
+          />
+        );
+      };
+
       const StockRow = ({ ticker, data, isETF, onTickerClick }) => {
+        const [showChart, setShowChart] = React.useState(false);
         const chg = isETF ? null : pct(data.price, data.prev);
         return (
-          <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderBottom: `1px solid ${C.bdr}`, gap: 12 }}>
-            <div style={{ minWidth: 56 }}><button onClick={() => onTickerClick(ticker)} style={{ background: "none", border: "none", color: C.acc, fontWeight: 700, fontSize: 14, cursor: "pointer", padding: 0 }}>{ticker}</button></div>
-            <div style={{ flex: 1 }}>
-              <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{data.name}</div>
-              <div style={{ color: C.dim, fontSize: 11 }}>{isETF ? `ER: ${data.er}% | AUM: ${data.aum}` : `${data.sector} | MCap: ${data.mc}`}</div>
+          <div style={{ borderBottom: `1px solid ${C.bdr}` }}>
+            <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", gap: 12 }}>
+              <div style={{ minWidth: 56 }}><button onClick={() => onTickerClick(ticker)} style={{ background: "none", border: "none", color: C.acc, fontWeight: 700, fontSize: 14, cursor: "pointer", padding: 0 }}>{ticker}</button></div>
+              <div style={{ flex: 1 }}>
+                <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{data.name}</div>
+                <div style={{ color: C.dim, fontSize: 11 }}>{isETF ? `ER: ${data.er}% | AUM: ${data.aum}` : `${data.sector} | MCap: ${data.mc}`}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>${data.price.toFixed(2)}</div>
+                {chg && <div style={{ color: chg >= 0 ? C.grn : C.red, fontSize: 12 }}>{chg >= 0 ? '+' : ''}{chg}%</div>}
+                {isETF && <div style={{ color: C.grn, fontSize: 12 }}>YTD: +{data.ytd}%</div>}
+              </div>
+              <button onClick={() => setShowChart(v => !v)} style={{ background: "none", border: `1px solid ${C.bdr}`, borderRadius: 6, color: C.dim, fontSize: 11, cursor: "pointer", padding: "3px 8px", whiteSpace: "nowrap" }}>
+                Chart {showChart ? '▴' : '▾'}
+              </button>
             </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>${data.price.toFixed(2)}</div>
-              {chg && <div style={{ color: chg >= 0 ? C.grn : C.red, fontSize: 12 }}>{chg >= 0 ? '+' : ''}{chg}%</div>}
-              {isETF && <div style={{ color: C.grn, fontSize: 12 }}>YTD: +{data.ytd}%</div>}
-            </div>
+            {showChart && <TradingViewWidget ticker={ticker} />}
           </div>
         );
       };
