@@ -67,24 +67,24 @@
     const C = { bg: "#0a0e1a", card: "#111827", bdr: "#1f2937", acc: "#3b82f6", grn: "#10b981", red: "#ef4444", yel: "#f59e0b", pur: "#8b5cf6", cyan: "#06b6d4", mut: "#9ca3af", dim: "#6b7280", txt: "#e5e7eb" };
     const COLORS = [C.acc, C.grn, C.pur, C.yel, C.cyan];
 
-    // === LUNR DATA === (last updated: 2026-03-01T12:00:00Z)
-    const LUNR_DATA = { name: "Intuitive Machines", price: 16.38, prev: 18.90, mc: "3.35B", pe: -8.83, w52h: 23.32, w52l: 6.14, sector: "Lunar Lander", ptAvg: 18.89, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === LUNR DATA === (last updated: 2026-04-09T12:00:00Z)
+    const LUNR_DATA = { name: "Intuitive Machines", price: 23.65, prev: 18.90, mc: "4.8B", pe: -8.83, w52h: 25.00, w52l: 6.14, sector: "Lunar Lander", ptAvg: 20.83, ptHigh: 26, ptLow: 9.5, beta: 2.97, risk: 9, lastUpdated: "2026-04-09T12:00:00Z" };
     // === END LUNR DATA ===
 
-    // === RKLB DATA === (last updated: 2026-03-01T12:00:00Z)
-    const RKLB_DATA = { name: "Rocket Lab", price: 69.10, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 65.91, ptHigh: 105, ptLow: 47.47, beta: 2.17, risk: 7, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === RKLB DATA === (last updated: 2026-04-09T12:00:00Z)
+    const RKLB_DATA = { name: "Rocket Lab", price: 68.27, prev: 72.65, mc: "39.2B", pe: -76.8, w52h: 99.58, w52l: 14.71, sector: "Launch + Systems", ptAvg: 79.17, ptHigh: 120, ptLow: 68, beta: 2.17, risk: 7, lastUpdated: "2026-04-09T12:00:00Z" };
     // === END RKLB DATA ===
 
-    // === FLY DATA === (last updated: 2026-03-01T12:00:00Z)
-    const FLY_DATA = { name: "Firefly Aerospace", price: 20.38, prev: 21.53, mc: "3.25B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 40.75, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === FLY DATA === (last updated: 2026-04-09T12:00:00Z)
+    const FLY_DATA = { name: "Firefly Aerospace", price: 39.42, prev: 38.12, mc: "6.10B", pe: -1.5, w52h: 73.80, w52l: 16.00, sector: "Launch + Lunar", ptAvg: 37.14, ptHigh: 65, ptLow: 28, beta: 2.89, risk: 8, lastUpdated: "2026-04-09T12:00:00Z" };
     // === END FLY DATA ===
 
-    // === UFO DATA === (last updated: 2026-03-01T12:00:00Z)
-    const UFO_DATA = { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === UFO DATA === (last updated: 2026-04-09T12:00:00Z)
+    const UFO_DATA = { name: "Procure Space ETF", price: 42.67, er: 0.94, w52h: 48.66, w52l: 18.40, ytd: 66.44, aum: "118M", holdings: 30, lastUpdated: "2026-04-09T12:00:00Z" };
     // === END UFO DATA ===
 
-    // === ARKX DATA === (last updated: 2026-03-01T12:00:00Z)
-    const ARKX_DATA = { name: "ARK Space & Defense", price: 32.40, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35, lastUpdated: "2026-03-01T12:00:00Z" };
+    // === ARKX DATA === (last updated: 2026-04-09T12:00:00Z)
+    const ARKX_DATA = { name: "ARK Space & Defense", price: 30.07, er: 0.75, w52h: 35.53, w52l: 15.07, ytd: 52.92, aum: "440M", holdings: 35, lastUpdated: "2026-04-09T12:00:00Z" };
     // === END ARKX DATA ===
 
     const STOCKS = { LUNR: LUNR_DATA, RKLB: RKLB_DATA, FLY: FLY_DATA };
@@ -92,18 +92,18 @@
     const ALL = { ...STOCKS, ...ETFS };
 
     const CATALYSTS = [
-      { event: "LUNR Earnings(Q4)", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "$175M raise impact, IM-3 timeline update, LTV proposal status, Lanteris integration progress",
+      { event: "LUNR Earnings (Q4) — COMPLETED", date: "Mar 19, 2026", impact: "High", type: "Earnings", detail: "Q4 rev $44.79M · FY2025 rev $210.06M · 2026 guide $900M–$1B · EBITDA positive · Backlog $943M",
         expandedContent: (
           <div>
-            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Lanteris Acquisition & Revenue Ramp</div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Q4 2025 Results (March 19, 2026)</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              Q4 2025 is the first report fully incorporating the Lanteris acquisition (closed Jan 2026, ~$800M deal). Combined company revenue exceeds $850M with $920M in contract backlog and positive adjusted EBITDA — a meaningful shift from standalone LUNR. The $175M equity raise at $15.12/share extends runway but dilutes. The long-run engine is NSNS ($4.82B NASA comms infrastructure contract via Space Networks Solutions LLC with KBR) — timing of revenue recognition from that contract is the key number to watch.
+              Q4 2025 revenue: $44.79M. Full-year 2025 revenue: $210.06M with net loss of $83.29M. Q4 gross margin was 19% positive — a meaningful improvement. Combined company backlog (as of February month-end) is ~$943M. Lanteris acquisition closed Q1 2026 at ~$800M as planned.
             </div>
-            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>What to Watch on the Call</div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>2026 Guidance — Bold Target</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              NSNS revenue recognition schedule, IM-3 launch window confirmation, LTV award status (management will face questions), and Lanteris integration cost surprises. If Lanteris synergies are ahead of plan and NSNS starts showing up in the top line, the stock re-rates.
+              Management guided 2026 revenue of $900M–$1B (nearly 5x FY2025) and positive adjusted EBITDA. The ramp depends heavily on NSNS revenue recognition and Lanteris integration. The long-run engine is NSNS ($4.82B NASA comms contract via Space Networks Solutions LLC with KBR) — timing of revenue flow-through from that contract remains the key variable to track.
             </div>
-            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Intuitive Machines investor press releases, Q1 2025 earnings call transcript, NSNS contract announcement (investors.intuitivemachines.com)</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Intuitive Machines Q4 2025 earnings release (investors.intuitivemachines.com, Mar 19, 2026), GlobeNewswire, StockTitan</div>
           </div>
         )
       },
@@ -147,7 +147,7 @@
           </div>
         )
       },
-      { event: "IM - 3 Mission Launch", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Reiner Gamma landing. Carries CADRE rovers + Khon - 2 relay satellite. Must land upright after two consecutive hard landings",
+      { event: "IM-3 Mission Launch (Trinity)", date: "H2 2026", impact: "Critical", type: "Mission", detail: "Lander named Trinity · Reiner Gamma landing · CADRE rovers + Khon-2 relay satellite + ALEPH-1 plant experiment · Must land upright after two consecutive hard landings",
         expandedContent: (
           <div>
             <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>The Failure Pattern</div>
@@ -162,39 +162,69 @@
             </div>
             <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>The Fix &amp; The Caveat</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              Engineering fixes for IM-3: redundant dissimilar altimeters, a lighting-independent surface velocity sensor, an expanded onboard crater database, and ML improvements trained on IM-2 imagery. Altemus said "slight cost increase, no schedule impact." Critical caveat: IM-3 targets Reiner Gamma near the equator — far easier than the south pole. IM-4 returns to the south pole. A clean IM-3 proves the altimeter fix, not the lighting challenge.
+              Engineering fixes for IM-3 (lander named Trinity): redundant dissimilar altimeters, a lighting-independent surface velocity sensor, an expanded onboard crater database, and ML improvements trained on IM-2 imagery. Altemus said "slight cost increase, no schedule impact." Critical caveat: IM-3 targets Reiner Gamma near the equator — far easier than the south pole. IM-4 returns to the south pole. A clean IM-3 proves the altimeter fix, not the lighting challenge. New payload added Dec 2025: ALEPH-1 plant growth/survival experiment from Lunaria One (Australian Space Agency funded).
             </div>
-            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: SpaceNews altimeter analysis (May 2025), Spaceflight Now Q1 earnings coverage, Intuitive Machines IM-2 mission page</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: SpaceNews altimeter analysis (May 2025), Spaceflight Now Q1 earnings coverage, Intuitive Machines IM-3 page, NASA CLPS event listing</div>
           </div>
         )
       },
-      { event: "RKLB Neutron First Launch", date: "Late 2026", impact: "High", type: "Mission", detail: "Medium - lift vehicle debut. Delayed from 2025. Key to competing with Falcon 9 for constellation deployment",
+      { event: "RKLB Neutron First Launch", date: "Mid-2026", impact: "High", type: "Mission", detail: "Medium-lift vehicle debut. Delayed from 2025. Stage 1 tank rupture in qualification testing. Fairing delivered to Wallops. Key to competing with Falcon 9",
         expandedContent: (
           <div>
             <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Sector Blue Chip Context</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
               Rocket Lab posted $602M in record Q4 2025 revenue and holds an $816M SDA (Space Development Agency) satellite constellation contract providing multi-year visibility. Electron has 50+ launches and is the proven small-sat workhorse. At $39.2B market cap, RKLB is expensive relative to peers — but it's grounded in real, growing revenue unlike LUNR or FLY.
             </div>
-            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Why Neutron Matters</div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Why Neutron Matters — And the Latest Setback</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              Neutron is a medium-lift reusable rocket meant to compete with Falcon 9 for constellation deployments — originally targeted 2025, now late 2026. Success would expand Rocket Lab's addressable market from ~$10B (small-sat launch) into the full launch market and validate its vertical integration strategy (they build the spacecraft, the components, and now the rocket). The delay risk is real: slippage from 2025 already cost credibility on timeline execution.
+              Neutron is a medium-lift reusable rocket meant to compete with Falcon 9 for constellation deployments — originally targeted 2025, now mid-2026. During qualification testing, the Stage 1 tank suffered a rupture during a hydrostatic pressure trial (Jan 2026). Testing failures at this stage are not uncommon in vehicle development but add timeline uncertainty. On the positive side, the "Hungry Hippo" captive fairing cleared qualification and was delivered to Wallops Island's Neutron Assembly and Integration Complex. Rocket Lab planned three Neutron launches in 2026 and five in 2027. Success would expand the addressable market from ~$10B (small-sat) to the full medium-lift market.
             </div>
-            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Rocket Lab Q4 2025 earnings release, SDA contract announcements, SpaceNews Neutron coverage</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Rocket Lab Neutron test update (Jan 21, 2026, investors.rocketlabcorp.com), NASASpaceFlight.com Neutron overview (Dec 2025), SpaceNews Neutron delay coverage</div>
           </div>
         )
       },
-      { event: "SpaceX IPO / Starlink Spin - off", date: "TBD 2026 - 27", impact: "Sector", type: "Catalyst", detail: "Could pull massive capital into space sector. Rising tide lifts all boats — or creates a gravity well that sucks liquidity from smaller names",
+      { event: "SpaceX IPO", date: "June roadshow · ~July 2026", impact: "Sector", type: "Catalyst", detail: "Roadshow week of June 8 · Prospectus late May · Targeting $1.75T–$2T valuation · Raising ~$75B · 30% retail allocation",
         expandedContent: (
           <div>
-            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>The Deal Structure</div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>IPO Timeline — Now Confirmed</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              SpaceX merged with xAI (which had acquired X/Twitter in March 2025) on February 2, 2026. The combined entity is valued at $1.25T ($1T SpaceX + $250B xAI) — the world's most valuable private company. SpaceX generated $15B in revenue and ~$8B in profit in 2025. xAI generated ~$250M in revenue while losing $2.5B. Musk is targeting a July 2026 IPO at up to $1.5T — approximately 94x trailing sales on the combined entity.
+              SpaceX (merged with xAI Feb 2, 2026) has confirmed IPO plans with a roadshow targeting the week of June 8, 2026. Prospectus expected late May. The company aims to raise ~$75B, targeting a valuation of $1.75T–$2T — up significantly from the $1.25T post-merger valuation. CFO Bret Johnsen confirmed up to 30% retail allocation. SpaceX generated $15B in revenue and ~$8B in profit in 2025. xAI generated ~$250M in revenue while losing $2.5B. At $1.75T, the entity would trade at ~110x trailing sales.
             </div>
             <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Sector Impact: Bull vs. Bear</div>
             <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
-              Bull: a successful IPO floods institutional attention into the space sector, lifting LUNR, FLY, and RKLB through re-rating and capital inflows. Bear: investors concentrate in SpaceX directly, draining liquidity from smaller names; or the $1.5T valuation disappoints and drags the whole sector lower. Some analysts view the xAI merger as profitable SpaceX subsidizing a cash-burning AI venture — a structural weakness if that narrative takes hold. XOVR ETF currently holds ~10-11% SpaceX for retail pre-IPO exposure.
+              Bull: a successful IPO floods institutional attention into the space sector, lifting LUNR, FLY, and RKLB through re-rating and capital inflows. IPO proceeds earmarked for higher Starship flight rate, AI data centers in orbit, and lunar base groundwork — all bullish for the sector ecosystem. Bear: investors concentrate in SpaceX directly, draining liquidity from smaller names; or the $1.75T–$2T valuation disappoints and drags the sector lower. Some analysts view the xAI merger as profitable SpaceX subsidizing a cash-burning AI venture. XOVR ETF holds ~10-11% SpaceX for retail pre-IPO exposure.
             </div>
-            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: CNBC SpaceX-xAI merger coverage (Feb 2026), Motley Fool merger analysis (Feb 22, 2026), Gary Marcus Substack</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: CNBC "SpaceX lays out IPO details" (Apr 7, 2026), Bloomberg "$2T valuation push" (Apr 8, 2026), Outlook Business SpaceX IPO coverage (Apr 2026)</div>
+          </div>
+        )
+      },
+      { event: "Artemis II — Crewed Lunar Flyby", date: "Apr 1–10, 2026", impact: "Sector", type: "Mission", detail: "COMPLETED: First crewed flight beyond LEO since Apollo 17 (1972). Launched Apr 1, lunar flyby Apr 6 at 4,067 mi altitude, new distance record 252,756 mi. Splashdown Apr 10.",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>Historic Mission — Just Completed</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              Artemis II launched April 1, 2026 — the first crewed flight beyond low Earth orbit since Apollo 17 in 1972. The four-person crew completed a historic lunar flyby on April 6, passing ~4,067 miles above the surface. Two minutes later, Orion set a new human spaceflight distance record at 252,756 miles from Earth (surpassing the Apollo 13 record). The crew photographed the lunar far side including craters, ancient lava flows, and surface features. Splashdown off California is scheduled April 10.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Sector Significance</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              A successful Artemis II validates the SLS/Orion system ahead of the crewed landing attempt (Artemis III, 2028 target), directly supporting the LUNR bull case. Every Artemis program milestone is a LUNR revenue event — NSNS ($4.82B) provides communications, LTV (pending) provides surface mobility, and CLPS task orders (IM-3, IM-4) pre-position payloads.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: NASA Artemis II mission page, NASA flight day blogs (Apr 2026), CNN live coverage, DogOnews mission recap</div>
+          </div>
+        )
+      },
+      { event: "LUNR IM-5 Contract Award", date: "Mar 24, 2026", impact: "High", type: "Contract", detail: "$180.4M NASA CLPS task order for Nova-D lander · Lunar South Pole (near Mons Malapert) · First Nova-D class mission · 7 payloads including Australian Space Agency rover",
+        expandedContent: (
+          <div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginBottom: 4 }}>What Was Awarded</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              NASA awarded Intuitive Machines a $180.4M CLPS task order on March 24, 2026 for IM-5 — the company's fifth CLPS contract and the first to require its larger Nova-D class lander. The mission delivers seven science and technology payloads to the lunar south pole near Mons Malapert, including the Australian Space Agency's rover and Blue Origin's Honeybee Robotics technologies. The stock surged ~36.9% on the news.
+            </div>
+            <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, marginTop: 10, marginBottom: 4 }}>Strategic Significance</div>
+            <div style={{ color: C.mut, fontSize: 12, lineHeight: 1.6 }}>
+              IM-5 is the first mission to validate LUNR's larger Nova-D platform, expanding capability beyond the Nova-C. Returning to the lunar south pole demonstrates commitment to the Artemis landing zone — critical context for the LTV bid. It also adds to LUNR's 2026 revenue visibility and signals continued NASA confidence despite IM-2's partial failure.
+            </div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 10 }}>Sources: Intuitive Machines press release (investors.intuitivemachines.com, Mar 24, 2026), GlobeNewswire, OrbitalToday, Yahoo Finance</div>
           </div>
         )
       },
@@ -216,8 +246,8 @@
     ];
 
     const STOCK_CONTEXT = {
-      LUNR: "IM-3 launch H2 2026 · LTV bid lowest at $1.69B · $4.82B NSNS backlog",
-      RKLB: "Record $602M Q4 rev · $816M SDA contract · Neutron debut late 2026",
+      LUNR: "IM-3 (Trinity) H2 2026 · IM-5 $180.4M awarded · LTV pending · $4.82B NSNS backlog",
+      RKLB: "Record $602M Q4 rev · $816M SDA contract · Neutron mid-2026 (tank test setback)",
       FLY:  "Blue Ghost: first clean commercial Moon landing · 5 CLPS task orders through 2029",
     };
     const ETF_CONTEXT = {
@@ -225,9 +255,9 @@
       ARKX: "Actively managed · 0.75% ER · Broadest definition of 'space' — includes defense, eVTOL",
     };
     const COST_CONTEXT = {
-      LUNR: "Next catalyst: Earnings Mar 19 → LTV award Q1-Q2 → IM-3 H2 2026",
-      RKLB: "Next catalyst: Neutron launch late 2026 · Trading at $39.2B MCap",
-      FLY:  "Blue Ghost 2 fully booked · IPO'd Aug 2025 at $45, now ~$20",
+      LUNR: "Q4 earnings complete · 2026 guide $900M–$1B · IM-5 awarded · LTV still pending",
+      RKLB: "Next catalyst: Neutron launch mid-2026 · Trading at $39.2B MCap",
+      FLY:  "Blue Ghost 2 fully booked · IPO'd Aug 2025 at $45, now ~$39",
     };
 
     const TABS = ["Overview", "Portfolio", "Catalysts", "Sensitivity", "Cost Basis"];
@@ -800,7 +830,7 @@
                 LUNR at ~${STOCKS.LUNR.price} trades at the cheapest P/S ratio among pure-play lunar names, but the discount exists for a reason — two hard landings and heavy insider selling (CEO Altemus sold 3M+ shares in 6 months). The recent $175M raise at $15.12/share further dilutes. The bull case requires: (1) IM-3 lands upright, proving the engineering fixes work, (2) LTV goes to LUNR's Moon RACER, unlocking $600M+ initial phase, (3) $175M raise is the last dilutive event before revenue ramp from NSNS. The bear case: IM-3 fails, LTV goes to Lunar Outpost, converts dilute into a declining stock.
               </div>
               <div style={{ color: C.mut, fontSize: 13, lineHeight: 1.7, marginTop: 12 }}>
-                RKLB is the sector's blue chip at $69 with a $39B market cap — expensive but backed by $602M record Q4 revenue and an $816M SDA contract. Neutron delay to late 2026 is the key risk. FLY at $20 is interesting: successful Blue Ghost lunar landing gives it credibility LUNR lacks, but the stock has cratered 72% from its $73.80 high.
+                RKLB is the sector's blue chip at $68 with a $39B market cap — expensive but backed by $602M record Q4 revenue and an $816M SDA contract. Neutron target mid-2026 after a Stage 1 tank setback in testing. FLY at $39 has recovered meaningfully from its post-IPO lows: successful Blue Ghost lunar landing gives it credibility LUNR lacks, and the stock is now ~47% off its $73.80 high vs. the ~72% hole it was in at the start of March.
               </div>
               <div style={{ marginTop: 16, borderTop: `1px solid ${C.bdr}`, paddingTop: 16 }}>
                 <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 10 }}>Mission Track Record</div>
@@ -838,8 +868,9 @@
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {[
                     { name: "NSNS", value: "$4.82B", status: "Active", timeline: "Multi-year", note: "NASA comms infrastructure via Space Networks Solutions LLC (LUNR + KBR JV)" },
-                    { name: "LTV", value: "~$4.6B", status: "Pending Award", timeline: "Q1-Q2 2026", note: "Artemis crewed lunar rover — Moon Racer bid at $1.692B" },
-                    { name: "Lanteris Acquisition", value: "~$800M", status: "Complete", timeline: "Jan 2026", note: "Combined rev >$850M, $920M backlog, positive EBITDA" },
+                    { name: "LTV", value: "~$4.6B", status: "Pending Award", timeline: "Q2 2026", note: "Artemis crewed lunar rover — Moon Racer bid at $1.692B · Still awaiting NASA decision as of Apr 2026" },
+                    { name: "IM-5 (Nova-D)", value: "$180.4M", status: "Awarded", timeline: "Mar 24, 2026", note: "First Nova-D class mission · 7 payloads incl. Australian rover · South Pole near Mons Malapert" },
+                    { name: "Lanteris Acquisition", value: "~$800M", status: "Complete", timeline: "Q1 2026", note: "Combined rev >$850M · Backlog $943M · Positive EBITDA · 2026 guide $900M–$1B" },
                     { name: "AFRL / JETSON", value: "$8.2M", status: "Active", timeline: "Ongoing", note: "In-space nuclear power technology contract extension" },
                     { name: "Khonstellation", value: "TBD", status: "In Development", timeline: "Khon2 on IM-3", note: "Lunar data relay constellation — first node launches on IM-3" },
                   ].map((r, i) => (
@@ -888,7 +919,7 @@
                     { risk: "LUNR Landing Execution", severity: "Critical", desc: "Two consecutive altimeter failures with same root cause. Fixes planned but unproven. IM-3 equatorial site won't test south pole performance that matters for Artemis." },
                     { risk: "LTV Contract Outcome", severity: "High", desc: "Landing track record is a liability. Lunar Outpost may replace Lockheed Martin. Loss means ~$4.6B total contract gone to a competitor." },
                     { risk: "Sector Valuation", severity: "High", desc: "Space stocks are narrative-driven and pre-profitability. Both LUNR and FLY well below 52-week highs. SpaceX IPO could re-rate sector up or down." },
-                    { risk: "SpaceX IPO Composition", severity: "Sector", desc: "Buying SpaceX also means buying money-losing xAI and X/Twitter. $1.5T target implies ~94x trailing sales. Could disappoint and drag sector down." },
+                    { risk: "SpaceX IPO Composition", severity: "Sector", desc: "Confirmed: roadshow June 8, targeting $1.75T–$2T valuation (~110x+ trailing sales). Buying SpaceX means buying money-losing xAI and X/Twitter. If valuation disappoints at that level, could drag the sector down." },
                     { risk: "Regulatory / Political Risk", severity: "High", desc: "Artemis has slipped from 2024 → 2025 → 2026 → 2028. Budget cuts or priority shifts could defer NSNS recognition and LTV execution." },
                   ].map((r, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 10px", background: C.bg, borderRadius: 6, border: `1px solid ${C.bdr}` }}>
@@ -1034,7 +1065,7 @@
           </div>}
 
           <div style={{ textAlign: "center", color: C.dim, fontSize: 10, marginTop: 24, padding: "12px 0", borderTop: `1px solid ${C.bdr}` }}>
-            Research platform for informational purposes only. Not financial advice. Data sourced Feb 28, 2026.
+            Research platform for informational purposes only. Not financial advice. Prices updated Apr 9, 2026. Catalysts updated Apr 9, 2026.
           </div>
 
           {refreshModal && (
