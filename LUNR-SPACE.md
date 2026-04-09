@@ -1,6 +1,6 @@
 # LUNR & Space Economy Investment Research Summary
 
-*Compiled from conversations on Feb 25 and Feb 28, 2026. All claims sourced below for independent verification.*
+*Compiled from conversations on Feb 25 and Feb 28, 2026. Prices and catalysts updated Apr 9, 2026. All claims sourced below for independent verification.*
 
 -----
 
@@ -52,7 +52,7 @@ During Intuitive Machines’ Q1 2025 earnings call on May 14, 2025, CEO Steve Al
 
 For IM-3, the company is implementing: dissimilar and redundant altimeters with more rigorous flight-like testing, a lighting-independent sensor for surface velocity measurements, an expanded onboard terrain crater database, and machine learning improvements using imagery collected during IM-2. Altemus said this will result in a “slight cost increase” but no schedule impact.
 
-Notably, IM-3 is headed to Reiner Gamma near the lunar equator — a much easier landing environment than the south pole. IM-4 will return to the south pole, which is where the real test of these fixes matters for Artemis relevance.
+Notably, IM-3 (lander named Trinity) is headed to Reiner Gamma near the lunar equator — a much easier landing environment than the south pole. IM-4 will return to the south pole, which is where the real test of these fixes matters for Artemis relevance. IM-3 payloads include CADRE rovers, Khon-2 relay satellite, ESA's MoonLIGHT MPAc, KASI's LUSEM, and the ALEPH-1 plant growth experiment (Lunaria One / Australian Space Agency, added December 2025).
 
 **Sources:** SpaceNews “Altimeter problems, lighting challenges caused IM-2 lunar lander to fall on its side” (spacenews.com, May 13, 2025), Spaceflight Now “Intuitive Machines’ CEO points to issues that prevented upright touchdown” (spaceflightnow.com, May 14, 2025), SpacePolicyOnline “IM-2’s Imperfect Landing Due to Altimeter Interference” (spacepolicyonline.com).
 
@@ -63,8 +63,9 @@ Notably, IM-3 is headed to Reiner Gamma near the lunar equator — a much easier
 Beyond landing missions, LUNR has built a substantial contract backlog:
 
 - **Near Space Network Services (NSNS):** A $4.82 billion contract with NASA for communications infrastructure, awarded through a joint venture (Space Networks Solutions LLC) led by Intuitive Machines with KBR.
-- **Lunar Terrain Vehicle (LTV):** LUNR is competing for a ~$4.6 billion NASA contract to build a commercially provided rover for Artemis crewed missions. Final proposals are due in late July 2025, with an award expected in November 2025. Competitors are Lunar Outpost (Eagle rover) and Venturi Astrolab (FLEX rover). LUNR’s bid was reportedly the lowest at $1.692 billion vs. $1.727B (Lunar Outpost) and $1.928B (Astrolab). Lunar Outpost lost its principal partner Lockheed Martin in September 2024, which may weaken their position.
-- **Lanteris Acquisition:** Completed in January 2026 for approximately $800 million, creating combined revenue exceeding $850 million with positive adjusted EBITDA and $920 million in backlog.
+- **Lunar Terrain Vehicle (LTV):** LUNR is competing for a ~$4.6 billion NASA contract to build a commercially provided rover for Artemis crewed missions. Award expected Q2 2026 (still pending as of April 2026 — previously expected Q1). Competitors are Lunar Outpost (Eagle rover) and Venturi Astrolab (FLEX rover). LUNR’s bid was reportedly the lowest at $1.692 billion vs. $1.727B (Lunar Outpost) and $1.928B (Astrolab). Congress has urged NASA to select no fewer than two providers. Lunar Outpost lost its principal partner Lockheed Martin in September 2024, which may weaken their position.
+- **IM-5 Contract (Nova-D):** NASA awarded a $180.4 million CLPS task order on March 24, 2026 for the IM-5 mission — LUNR’s fifth CLPS task order and the first for the larger Nova-D lander class. Mission targets the lunar south pole near Mons Malapert with seven payloads including the Australian Space Agency’s rover and Blue Origin’s Honeybee Robotics technologies.
+- **Lanteris Acquisition:** Completed in Q1 2026 for approximately $800 million. Q4 2025 earnings (March 19, 2026) confirmed combined backlog of ~$943M, positive adjusted EBITDA guidance for 2026, and 2026 revenue guidance of $900M–$1B.
 - **AFRL Contract:** $8.2 million contract extension for in-space nuclear power technology (JETSON project).
 - **Lunar Data Network / Khonstellation:** Building a constellation of data relay satellites, with the first satellite (Khon2) planned for launch on IM-3.
 
@@ -82,7 +83,7 @@ Blue Ghost operated for over 14 days (346 hours) on the lunar surface. All 10 NA
 
 Firefly has been awarded five CLPS task orders supporting four missions through 2029. Blue Ghost Mission 2 is already fully booked.
 
-Firefly IPO’d on August 7, 2025 under the ticker FLY on the Nasdaq, pricing at $45/share and raising $868 million — the largest space and defense technology IPO ever. Shares opened at $70 and closed at $60.35 on day one. As of February 27, 2026, FLY is trading around $21.53, with a 52-week range of $16 to $73.80. Analyst consensus is Buy with an average 12-month price target of $38.29. Note: shareholder class action lawsuits have been filed following the post-IPO decline.
+Firefly IPO’d on August 7, 2025 under the ticker FLY on the Nasdaq, pricing at $45/share and raising $868 million — the largest space and defense technology IPO ever. Shares opened at $70 and closed at $60.35 on day one. As of April 9, 2026, FLY is trading around $39.42 (market cap ~$6.1B), with a 52-week range of $16 to $73.80. Analyst consensus is Buy with an average 12-month price target of $37.14. Note: shareholder class action lawsuits were filed following the post-IPO decline.
 
 **Sources:** Firefly press release March 17, 2025 (fireflyspace.com), SpaceNews “A vindication for NASA’s CLPS program” (spacenews.com, Dec 3, 2025), NASASpaceFlight.com “Blue Ghost successfully starts lunar surface mission” (March 7, 2025), Wikipedia Blue Ghost Mission 1 entry, Firefly IPO pricing press release (fireflyspace.com, Aug 6, 2025), CNBC “Firefly Aerospace soars over 30% in market debut” (cnbc.com, Aug 7, 2025), Investing.com FLY price data.
 
@@ -103,19 +104,29 @@ Firefly IPO’d on August 7, 2025 under the ticker FLY on the Nasdaq, pricing at
 
 -----
 
-## 6. SpaceX IPO and Sector Catalyst
+## 6. Artemis II — Sector Catalyst (April 2026)
 
-SpaceX merged with xAI (which had previously acquired X/Twitter in March 2025) on February 2, 2026. The deal valued SpaceX at $1 trillion and xAI at $250 billion, creating the world’s most valuable private company at $1.25 trillion. The merger was structured as an all-stock acquisition, with each xAI share converting to 0.1433 shares of SpaceX.
+NASA's Artemis II mission launched April 1, 2026 — the first crewed flight beyond low Earth orbit since Apollo 17 in 1972. The four-person crew completed a historic lunar flyby on April 6, passing approximately 4,067 miles above the lunar surface. The crew set a new human spaceflight distance record at 252,756 miles from Earth, surpassing the Apollo 13 record set in 1970. Splashdown off California is scheduled for April 10, 2026.
 
-Musk plans to IPO the combined entity in mid-2026 (reportedly targeting July) at a valuation of up to $1.5 trillion. SpaceX reportedly generated $15 billion in revenue and approximately $8 billion in profit in 2025. xAI generated roughly $250 million in revenue over six months while losing $2.5 billion. At $1.5T, the combined entity would trade at approximately 94x trailing sales and 500x trailing earnings.
+A successful Artemis II validates the SLS/Orion stack ahead of the Artemis III crewed landing attempt (2028 target) and reinforces the full lunar infrastructure thesis that underpins the LUNR bull case — NSNS for communications, LTV for surface mobility, and CLPS for payload delivery.
 
-A SpaceX IPO would likely boost space sector stocks (including LUNR and FLY) through increased institutional attention, capital inflows, and valuation re-rating. However, if the market rejects the valuation, it could drag the sector down. Some analysts view the merger as primarily a bailout for cash-burning xAI using SpaceX’s profitable business.
-
-**Sources:** CNBC “Musk’s xAI, SpaceX combo is the biggest merger of all time” (cnbc.com, Feb 3, 2026), CNBC “Elon Musk’s SpaceX acquiring AI startup xAI” (cnbc.com, Feb 2, 2026), Motley Fool “What You Need to Know About the SpaceX-xAI Merger” (fool.com, Feb 22, 2026), CNBC “Musk announces xAI re-org” (cnbc.com, Feb 11, 2026), Gary Marcus Substack “Four theories about the SpaceX-xAI merger” (Feb 3, 2026).
+**Sources:** NASA Artemis II mission page and flight day blogs (nasa.gov, Apr 1–10, 2026), CNN live coverage, DogOnews "NASA's Artemis II Completes Record-Breaking Lunar Flyby" (Apr 8, 2026).
 
 -----
 
-## 7. Space ETFs — Hedging Across the Sector
+## 7. SpaceX IPO and Sector Catalyst
+
+SpaceX merged with xAI (which had previously acquired X/Twitter in March 2025) on February 2, 2026. The deal valued SpaceX at $1 trillion and xAI at $250 billion, creating the world’s most valuable private company at $1.25 trillion. The merger was structured as an all-stock acquisition, with each xAI share converting to 0.1433 shares of SpaceX.
+
+As of April 2026, SpaceX has confirmed its IPO plans. The roadshow is targeting the week of June 8, 2026, with the prospectus expected in late May. The company is raising approximately $75 billion at a valuation of $1.75 trillion to potentially $2 trillion — a significant increase from the $1.25T post-merger valuation set in February. CFO Bret Johnsen confirmed a record ~30% retail allocation. SpaceX generated $15 billion in revenue and approximately $8 billion in profit in 2025. xAI generated roughly $250 million in revenue over six months while losing $2.5 billion. At $1.75T, the combined entity would trade at approximately 110x trailing sales. IPO proceeds are earmarked for higher Starship flight rates, AI-powered data centers in orbit, and early groundwork for a permanent lunar base.
+
+A SpaceX IPO would likely boost space sector stocks (including LUNR and FLY) through increased institutional attention, capital inflows, and valuation re-rating. However, if the market rejects the $1.75T–$2T valuation, it could drag the sector down. Some analysts view the merger as primarily a bailout for cash-burning xAI using SpaceX’s profitable business.
+
+**Sources:** CNBC “SpaceX lays out IPO details, targets early June roadshow” (cnbc.com, Apr 7, 2026), Bloomberg “SpaceX $2T valuation push” (bloomberg.com, Apr 8, 2026), CNBC “SpaceX-xAI merger” (Feb 3, 2026), Outlook Business SpaceX IPO coverage (Apr 2026).
+
+-----
+
+## 8. Space ETFs — Hedging Across the Sector
 
 For investors who want space exposure without single-stock risk, three primary ETFs are available, plus one with unique SpaceX access:
 
@@ -160,12 +171,12 @@ These are illustrative only and not recommendations:
 
 -----
 
-## 8. Key Risks and Open Questions
+## 9. Key Risks and Open Questions
 
 - **LUNR landing execution:** Two consecutive missions with the same root cause failure (altimeter). Fixes are planned but unproven. IM-3’s equatorial landing site won’t test south pole performance.
-- **LTV contract uncertainty:** Award expected November 2025. LUNR has the lowest bid and stable partners, but landing track record is a liability. Lunar Outpost lost Lockheed Martin but may find a replacement.
-- **Sector valuation:** Space stocks are narrative-driven and pre-profitability. Both LUNR and FLY are trading well below their highs. The sector could re-rate upward on a SpaceX IPO or downward if that IPO disappoints.
-- **SpaceX IPO composition:** Investors buying SpaceX will also be buying money-losing xAI and X/Twitter. The $1.5T target valuation implies extreme multiples. Some analysts view the xAI merger as a bailout rather than strategic synergy.
+- **LTV contract uncertainty:** Award expected Q2 2026 (still pending as of April 2026). LUNR has the lowest bid and stable partners, but the track record of two consecutive hard landings is a liability. Congress pushed NASA toward selecting two providers — which could split the contract but also partially de-risk a LUNR loss.
+- **Sector valuation:** Space stocks are narrative-driven and pre-profitability. LUNR has recovered significantly (now ~$23.65 from a low of ~$6), FLY has recovered to ~$39 from post-IPO lows. The sector could re-rate upward on the SpaceX IPO or downward if that IPO disappoints.
+- **SpaceX IPO composition:** Confirmed roadshow June 8 at $1.75T–$2T valuation. Investors buying SpaceX will also be buying money-losing xAI and X/Twitter. At ~110x trailing sales, valuation is extreme. If the IPO disappoints, it could drag the sector down.
 - **ETF expense ratios:** Space ETFs charge 0.45-0.94%, significantly higher than broad market index funds. Justified only if the sector outperforms.
 - **Regulatory/political risk:** NASA budgets, Artemis program timelines, and defense spending priorities could shift. Trump’s executive order targets a 2028 Moon landing, but program execution depends on sustained funding.
 
